@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="296.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfaceproyecto1.FXMLDocumentController">
+   <children>
+      <Button layoutX="84.0" layoutY="75.0" mnemonicParsing="false" onAction="#escribe" text="Decir Hola" />
+      <Button fx:id="borrar" layoutX="232.0" layoutY="75.0" mnemonicParsing="false" onAction="#borra" text="Borrar Hola" />
+      <Label fx:id="saludo" layoutX="82.0" layoutY="116.0" prefHeight="65.0" prefWidth="237.0" text="Hola Mundo" visible="false">
+         <font>
+            <Font size="34.0" />
+         </font>
+      </Label>
+      <Label fx:id="mensaje" layoutX="112.0" layoutY="257.0" prefHeight="25.0" prefWidth="274.0" text="Bueno aqui esta tu mensaje XD XDXD XD XDXD" />
+      <Button layoutX="112.0" layoutY="226.0" mnemonicParsing="false" onAction="#mostrarMensaje" text="Mostrar Mensaje" />
+      <Button layoutX="28.0" layoutY="22.0" mnemonicParsing="false" onAction="#imprimir" text="Imprimir Mensaje">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Label layoutX="160.0" layoutY="22.0" prefHeight="25.0" prefWidth="221.0" text="Que onda mi compadre" visible="false">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="imprime" layoutX="152.0" layoutY="22.0" prefHeight="25.0" prefWidth="237.0" text="Que onda mi compadre" visible="false">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Button layoutX="32.0" layoutY="194.0" mnemonicParsing="false" onAction="#ingresarDoc" text="Ingresar Documento" />
+      <TextField fx:id="txt" layoutX="158.0" layoutY="194.0" prefHeight="25.0" prefWidth="228.0" text="Escribe el nombre del Documento" />
+      <ComboBox fx:id="cbox" layoutX="11.0" layoutY="257.0" prefHeight="25.0" prefWidth="96.0" />
+   </children>
+</AnchorPane>
