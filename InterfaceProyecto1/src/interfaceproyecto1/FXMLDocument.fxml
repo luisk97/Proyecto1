@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -7,34 +9,236 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="296.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfaceproyecto1.FXMLDocumentController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="529.0" prefWidth="768.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfaceproyecto1.FXMLDocumentController">
    <children>
-      <Button layoutX="84.0" layoutY="75.0" mnemonicParsing="false" onAction="#escribe" text="Decir Hola" />
-      <Button fx:id="borrar" layoutX="232.0" layoutY="75.0" mnemonicParsing="false" onAction="#borra" text="Borrar Hola" />
-      <Label fx:id="saludo" layoutX="82.0" layoutY="116.0" prefHeight="65.0" prefWidth="237.0" text="Hola Mundo" visible="false">
-         <font>
-            <Font size="34.0" />
-         </font>
-      </Label>
-      <Label fx:id="mensaje" layoutX="112.0" layoutY="257.0" prefHeight="25.0" prefWidth="274.0" text="Bueno aqui esta tu mensaje XD XDXD XD XDXD" />
-      <Button layoutX="112.0" layoutY="226.0" mnemonicParsing="false" onAction="#mostrarMensaje" text="Mostrar Mensaje" />
-      <Button layoutX="28.0" layoutY="22.0" mnemonicParsing="false" onAction="#imprimir" text="Imprimir Mensaje">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Button>
-      <Label layoutX="160.0" layoutY="22.0" prefHeight="25.0" prefWidth="221.0" text="Que onda mi compadre" visible="false">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Label>
-      <Label fx:id="imprime" layoutX="152.0" layoutY="22.0" prefHeight="25.0" prefWidth="237.0" text="Que onda mi compadre" visible="false">
+      <Label fx:id="imprime" layoutX="516.0" layoutY="490.0" prefHeight="25.0" prefWidth="237.0" text="Que onda mi compadre" visible="false">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Button layoutX="32.0" layoutY="194.0" mnemonicParsing="false" onAction="#ingresarDoc" text="Ingresar Documento" />
-      <TextField fx:id="txt" layoutX="158.0" layoutY="194.0" prefHeight="25.0" prefWidth="228.0" text="Escribe el nombre del Documento" />
-      <ComboBox fx:id="cbox" layoutX="11.0" layoutY="257.0" prefHeight="25.0" prefWidth="96.0" />
+      <TreeView layoutY="51.0" prefHeight="480.0" prefWidth="270.0" />
+      <Pane fx:id="fondoCrearJson" layoutX="267.0" layoutY="51.0" prefHeight="480.0" prefWidth="498.0" style="-fx-background-color: ffffff;" visible="false">
+         <children>
+            <Button mnemonicParsing="false" onAction="#cancelarCrearJson" prefHeight="26.0" prefWidth="69.0" text="Atras" />
+            <Label alignment="CENTER" layoutX="216.0" layoutY="6.0" prefHeight="25.0" prefWidth="155.0" style="-fx-background-color: ffaaff;" text="HOLA!!!!">
+               <cursor>
+                  <Cursor fx:constant="NONE" />
+               </cursor>
+               <effect>
+                  <ColorAdjust saturation="-0.16" />
+               </effect>
+            </Label>
+            <Label layoutX="99.0" layoutY="88.0" prefHeight="25.0" prefWidth="210.0" text="Nombre del JsonStore">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <Button layoutX="338.0" layoutY="177.0" mnemonicParsing="false" onAction="#ingresarJson" prefHeight="26.0" prefWidth="96.0" text="Crear" />
+            <TextField fx:id="txtNombreJsonField" layoutX="99.0" layoutY="124.0" prefHeight="25.0" prefWidth="342.0" />
+            <Label fx:id="labelMensajeCrearJson" layoutX="99.0" layoutY="240.0" prefHeight="37.0" prefWidth="342.0" style="-fx-background-color: ffffff;" />
+         </children>
+      </Pane>
+      <Pane prefHeight="52.0" prefWidth="768.0" style="-fx-background-color: cc92aa;">
+         <children>
+            <Button layoutX="706.0" layoutY="14.0" mnemonicParsing="false" text="Comit" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoPrincipal" layoutX="270.0" layoutY="51.0" prefHeight="480.0" prefWidth="498.0">
+         <children>
+            <Button layoutX="200.0" layoutY="36.0" mnemonicParsing="false" onAction="#goCrearJson" prefHeight="25.0" prefWidth="112.0" text="Crear JsonStore" />
+            <Button fx:id="btninsertarJson" disable="true" layoutX="200.0" layoutY="75.0" mnemonicParsing="false" onAction="#goInsertarJson" prefHeight="25.0" prefWidth="112.0" text="Insertar JsonStore" />
+            <Button fx:id="btnBuscarJson" disable="true" layoutX="200.0" layoutY="116.0" mnemonicParsing="false" onAction="#goBuscarJson" prefHeight="25.0" prefWidth="112.0" text="BuscarJsonStore" />
+            <Button fx:id="btnEliminarJson" disable="true" layoutX="200.0" layoutY="158.0" mnemonicParsing="false" onAction="#goEliminarJson" text="Eliminar JsonStore" />
+            <Label layoutY="442.0" prefHeight="17.0" prefWidth="37.0" text="Stores:" />
+            <Label fx:id="labelListaStores" layoutY="459.0" prefHeight="17.0" prefWidth="498.0" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoInsertarJson1" layoutX="270.0" layoutY="52.0" prefHeight="114.0" prefWidth="498.0" visible="false">
+         <children>
+            <Label layoutX="14.0" layoutY="38.0" prefHeight="26.0" prefWidth="292.0" text="Ingrese el indice donde desea insertar:">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtIndInsertJsonField" layoutX="323.0" layoutY="39.0" prefHeight="25.0" prefWidth="69.0" />
+            <Button fx:id="btnVerificarInsertarJson" layoutX="424.0" layoutY="39.0" mnemonicParsing="false" onAction="#goInsertarJson2" text="Verificar" />
+            <Label fx:id="labelInsertarJson1" layoutX="14.0" layoutY="74.0" prefHeight="25.0" prefWidth="410.0" style="-fx-background-color: f14;">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Button layoutY="2.0" mnemonicParsing="false" onAction="#cancelarInsertarJson" text="Cancelar" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoInsertarJson2" layoutX="267.0" layoutY="166.0" prefHeight="224.0" prefWidth="498.0" visible="false">
+         <children>
+            <Label layoutX="14.0" layoutY="25.0" prefHeight="17.0" prefWidth="283.0" text="Ingrese el nombre del JsonStore:">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtIndInsertNombreJsonField" layoutX="14.0" layoutY="59.0" prefHeight="26.0" prefWidth="476.0" />
+            <Button fx:id="btnInsertarJson2" layoutX="432.0" layoutY="100.0" mnemonicParsing="false" onAction="#goInsertarJson3" text="Insertar" />
+            <Label fx:id="labelInsertarJson2" layoutX="14.0" layoutY="144.0" prefHeight="25.0" prefWidth="410.0" style="-fx-background-color: f14;">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Button layoutX="223.0" layoutY="185.0" mnemonicParsing="false" onAction="#continuarInsertarJson" text="Continuar" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoBuscarJson" layoutX="270.0" layoutY="51.0" prefHeight="129.0" prefWidth="498.0" visible="false">
+         <children>
+            <Label layoutX="140.0" layoutY="40.0" prefHeight="25.0" prefWidth="230.0" text="Buscar JsonStore(Base de datos)">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnBuscarJsonNombre" layoutX="87.0" layoutY="83.0" mnemonicParsing="false" onAction="#goBuscarJsonNombre" text="Por Nombre" />
+            <Button fx:id="btnBuscarJsonIndice" layoutX="356.0" layoutY="83.0" mnemonicParsing="false" onAction="#goBuscarJsonIndice" text="Por Indice" />
+            <Button layoutY="2.0" mnemonicParsing="false" onAction="#cancelarBusqueda" text="Cancelar" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoBuscarJsonNombre" layoutX="270.0" layoutY="166.0" prefHeight="364.0" prefWidth="498.0" visible="false">
+         <children>
+            <Label layoutX="14.0" layoutY="23.0" prefHeight="20.0" prefWidth="270.0" text="Introduce el nombre del JsonStore tal cual:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField layoutX="14.0" layoutY="50.0" prefHeight="25.0" prefWidth="307.0" />
+            <Button layoutX="339.0" layoutY="50.0" mnemonicParsing="false" text="Buscar" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoBuscarJsonIndice" layoutX="270.0" layoutY="186.0" prefHeight="345.0" prefWidth="498.0" visible="false">
+         <children>
+            <Label layoutX="14.0" layoutY="23.0" text="Introduce el indice del JsonStore que desea:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtBuscarIndiceField" layoutX="295.0" layoutY="21.0" prefHeight="25.0" prefWidth="96.0" />
+            <Button layoutX="414.0" layoutY="21.0" mnemonicParsing="false" onAction="#buscarJsonIndice" text="Buscar" />
+            <Label fx:id="labelBuscarJsonIndice" layoutX="8.0" layoutY="68.0" prefHeight="25.0" prefWidth="370.0" />
+            <Button fx:id="btnIngresarEnJsonStore" disable="true" layoutX="178.0" layoutY="102.0" mnemonicParsing="false" onAction="#goIngresarJsonStore" text="Ingresar En el JsonStore" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoMenuJsonStore" layoutX="270.0" layoutY="51.0" prefHeight="480.0" prefWidth="498.0" visible="false">
+         <children>
+            <Label fx:id="labelPricipalMenuJsonStore" alignment="CENTER" layoutX="102.0" layoutY="17.0" prefHeight="17.0" prefWidth="318.0" />
+            <Button layoutX="183.0" layoutY="86.0" mnemonicParsing="false" onAction="#goCrearDocumentoJson" prefHeight="25.0" prefWidth="155.0" text="Crear DocumentoJson" />
+            <Button layoutX="183.0" layoutY="123.0" mnemonicParsing="false" onAction="#goInsertarDocumentoJson" prefHeight="25.0" prefWidth="155.0" text="Insertar DocumentoJson" />
+            <Button layoutX="183.0" layoutY="196.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="155.0" text="Eliminar DocumentoJson" />
+            <Button layoutY="2.0" mnemonicParsing="false" onAction="#atrasmenuJsonStore" text="Atras" />
+            <Button layoutX="183.0" layoutY="160.0" mnemonicParsing="false" onAction="#goBuscarDocumentoJson" prefHeight="25.0" prefWidth="155.0" text="Buscar DocumentoJson" />
+            <Button layoutX="174.0" layoutY="276.0" mnemonicParsing="false" text="Cambiar Nombre al JsonStore" />
+            <Label fx:id="labelListaDocumentos" layoutY="458.0" prefHeight="17.0" prefWidth="498.0" text="Label" />
+            <Label layoutY="441.0" text="Lista DocumentosJson:" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoEliminarStore" layoutX="267.0" layoutY="52.0" prefHeight="114.0" prefWidth="498.0" visible="false">
+         <children>
+            <Button mnemonicParsing="false" onAction="#atrasEliminarJson" text="Atras" />
+            <Label layoutX="145.0" layoutY="25.0" text="Eliminar JsonStore(Base de Datos)">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnEliminarNombreJson" layoutX="93.0" layoutY="65.0" mnemonicParsing="false" text="Por Nombre" />
+            <Button fx:id="btneliminarIndiceJson" layoutX="334.0" layoutY="65.0" mnemonicParsing="false" onAction="#eliminarIndiceJson" text="Por Indice" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoEliminarIndiceJson" layoutX="267.0" layoutY="167.0" prefHeight="364.0" prefWidth="498.0" visible="false">
+         <children>
+            <Label layoutX="14.0" layoutY="27.0" text="Introdusca el indice del JsonStore que desea Eliminar:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtEliminarIndiceField" layoutX="351.0" layoutY="25.0" prefHeight="25.0" prefWidth="81.0" />
+            <Button layoutX="438.0" layoutY="25.0" mnemonicParsing="false" onAction="#verificarEliminarJson" text="Verificar" />
+            <Label fx:id="labelEliminarIndiceJson" layoutX="25.0" layoutY="73.0" prefHeight="17.0" prefWidth="307.0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnEliminarIndiceJsonDefinitivo" layoutX="223.0" layoutY="124.0" mnemonicParsing="false" onAction="#eliminarJsonDefinitivo" text="Eliminar" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoCrearDocumentoJson" layoutX="267.0" layoutY="52.0" prefHeight="480.0" prefWidth="498.0" visible="false">
+         <children>
+            <Button mnemonicParsing="false" onAction="#atrasCrearDocumento" text="Atras" />
+            <Label layoutX="94.0" layoutY="62.0" text="Introduce el nombre del DocumentoJson(Entidad):">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtCrearDocumentoJsonField" layoutX="54.0" layoutY="111.0" prefHeight="25.0" prefWidth="410.0" />
+            <Button layoutX="412.0" layoutY="163.0" mnemonicParsing="false" onAction="#crearDocumentoJson" text="Crear" />
+            <Label fx:id="labelCrearDocumentoJson" layoutX="54.0" layoutY="223.0" prefHeight="17.0" prefWidth="342.0" text="Label">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane fx:id="fondoInsertarDocumento1" layoutX="270.0" layoutY="51.0" prefHeight="114.0" prefWidth="498.0" visible="false">
+         <children>
+            <Button mnemonicParsing="false" onAction="#atrasInsertarDocumento" text="Atras" />
+            <Label layoutX="43.0" layoutY="37.0" prefHeight="20.0" prefWidth="259.0" text="Intrudusca el indice donde desea insertar:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField layoutX="308.0" layoutY="35.0" prefHeight="25.0" prefWidth="96.0" />
+            <Button layoutX="424.0" layoutY="35.0" mnemonicParsing="false" onAction="#verificarInsertarDocumento" text="Verificar" />
+            <Label layoutX="22.0" layoutY="83.0" prefHeight="17.0" prefWidth="330.0" text="Label">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane fx:id="fondoInsertarDocumento2" layoutX="270.0" layoutY="167.0" prefHeight="224.0" prefWidth="498.0" visible="false">
+         <children>
+            <Label layoutX="41.0" layoutY="24.0" text="Introdusca el nombre del documentoJson(Entidad):">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField layoutX="41.0" layoutY="65.0" prefHeight="25.0" prefWidth="417.0" />
+            <Button layoutX="224.0" layoutY="112.0" mnemonicParsing="false" text="Crear" />
+            <Label layoutX="41.0" layoutY="174.0" prefHeight="17.0" prefWidth="342.0" text="Label">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane fx:id="fondoBuscarDocumento1" layoutX="270.0" layoutY="52.0" prefHeight="129.0" prefWidth="498.0" visible="false">
+         <children>
+            <Button mnemonicParsing="false" onAction="#atrasBuscarDocumento" text="Atras" />
+            <Label layoutX="149.0" layoutY="25.0" text="Buscar documentoJson(Entidad):">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Button layoutX="90.0" layoutY="65.0" mnemonicParsing="false" text="Por Nombre" />
+            <Button layoutX="329.0" layoutY="65.0" mnemonicParsing="false" onAction="#buscarDocumentoIndice" prefHeight="25.0" prefWidth="81.0" text="Por Indice" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoBuscarDocumento2" layoutX="270.0" layoutY="166.0" prefHeight="364.0" prefWidth="498.0" visible="false">
+         <children>
+            <Label layoutX="14.0" layoutY="27.0" text="Introduce el indice del Documento que desea:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField layoutX="306.0" layoutY="25.0" prefHeight="25.0" prefWidth="96.0" />
+            <Button layoutX="425.0" layoutY="25.0" mnemonicParsing="false" text="Buscar" />
+            <Label layoutX="15.0" layoutY="95.0" prefHeight="17.0" prefWidth="342.0" text="Label" />
+            <Button layoutX="172.0" layoutY="170.0" mnemonicParsing="false" text="Ingresar en el Documento" />
+         </children>
+      </Pane>
    </children>
 </AnchorPane>

@@ -8,9 +8,9 @@ public class JsonStore {
     private JsonStore siguiente;
     private JsonStore anterior;
     
-    public JsonStore(String nombre,ListaDoblementeEnlazadaCircular lista){
+    public JsonStore(String nombre){
         this.nombre = nombre;
-        this.lista = lista;
+        lista = new ListaDoblementeEnlazadaCircular();
     }
     
     public void setNombre(String nombre){

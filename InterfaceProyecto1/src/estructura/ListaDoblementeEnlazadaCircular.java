@@ -52,11 +52,10 @@ public class ListaDoblementeEnlazadaCircular {
     }
     
     public DocumentoJson obtener(int indice){
-        int contador = 0;
         DocumentoJson temp = primero;
-        while(contador < indice){
+        while(0 < indice){
             temp = temp.obtenerSuiguiente();
-            contador++;
+            indice--;
         }
         return temp;
     }
@@ -69,7 +68,7 @@ public class ListaDoblementeEnlazadaCircular {
 //        return temp.obtenerAnterior().obtenerNombre();
 //    }
 //    
-   public Object obtenerUltimo(){
+   public DocumentoJson obtenerUltimo(){
            return ultimo;
         } 
 //    public Object obtenerPrimero(){
@@ -77,16 +76,17 @@ public class ListaDoblementeEnlazadaCircular {
 //    }
 
     
-    public void obtenerLista(){
+    public String obtenerLista(){
         if(primero == null){
-            System.out.println("JsonStore vacio.");
+            return("JsonStore vacio.");
         }else{
+            String lista = "";
             DocumentoJson temp = primero;
             for(int i = 0;i < size;i++){
-                System.out.print(temp.obtenerNombre()+", ");
+                lista += (temp.obtenerNombre()+", ");
                 temp = temp.obtenerSuiguiente();
             }
-            System.out.println("");
+            return lista;
         }
     }
     
