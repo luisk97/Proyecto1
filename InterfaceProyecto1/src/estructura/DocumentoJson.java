@@ -28,7 +28,7 @@ public class DocumentoJson {
         anterior = a;
     }
     
-    public DocumentoJson obtenerSuiguiente(){
+    public DocumentoJson obtenerSiguiente(){
         return siguiente;
     }
     

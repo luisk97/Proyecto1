@@ -31,7 +31,7 @@ public class ListaEnlazadaDoble {
     }
     
     
-    public int imprimirLista(){
+    public int imprimirSize(){
         return size;
     }
     
@@ -42,6 +42,18 @@ public class ListaEnlazadaDoble {
             index--;
         }
         return temp;
+    }
+    
+    public JsonStore obtenerPorNombre(String nombre){
+        JsonStore temp = cabeza;
+        while(temp != null){
+            if(temp.obtenerNombre().equals(nombre)){
+                return temp;
+            }else{
+                temp = temp.obtenerSiguiente();
+            }
+        }
+        return null;
     }
 //    public Object obtenerAnterior(int index){
 //        JsonStore temp = cabeza;
@@ -103,7 +115,7 @@ public class ListaEnlazadaDoble {
                 }else{
                     actual = actual.obtenerSiguiente();
                 }
-            }  
+            }
             JsonStore temp = ultimo;
             JsonStore nuevo = new JsonStore(nom);
             temp.enlazarSiguiente(nuevo);
@@ -115,27 +127,71 @@ public class ListaEnlazadaDoble {
         return("Se creo el Store: "+ nom);
     }
     
-//    public void cortar(int index){
-//        JsonStore temp = cabeza;
-//        for(int i = 0;i < (index-1);i++){
-//                temp = temp.obtenerSuiguiente();
-//        }
-//        temp.enlazarSiguiente(null);
-//        size = index;
-//    }
+    
     
     public void eliminar(int indice){
-        if(indice == 0){
-            cabeza = cabeza.obtenerSiguiente();
+        if(indice == 0 && cabeza == ultimo){
+            cabeza=null;
+            ultimo=null;
         }else{
-            JsonStore temp = cabeza;
-            for(int i = 0;i < (indice-1);i++){
-                temp = temp.obtenerSiguiente();
+            if(indice == 0){
+                cabeza = cabeza.obtenerSiguiente();
+            }else{
+                JsonStore temp = cabeza;
+                for(int i = 0;i < indice;i++){
+                    temp = temp.obtenerSiguiente();
+                }
+                if(indice == (size-1)){
+                    ultimo = temp.obtenerAnterior();
+                    ultimo.enlazarSiguiente(null);
+                }else{
+                    temp.obtenerAnterior().enlazarSiguiente(temp.obtenerSiguiente());
+                    temp.obtenerSiguiente().enlazarAnterior(temp.obtenerAnterior());
+                }
             }
-            temp.enlazarSiguiente(temp.obtenerSiguiente().obtenerSiguiente());
         }
         size--;
     }
+    
+    
+    
+    
+     public String eliminar(String nom){
+        JsonStore actual = cabeza;
+        while(actual != null){
+            if(actual.obtenerNombre().equals(nom)){
+                if(actual==cabeza && cabeza==ultimo){
+                    cabeza=null;
+                    ultimo=null;
+                    size--;
+                    return("Eliminado");
+                }else{
+                    if(actual == cabeza){
+                        cabeza = cabeza.obtenerSiguiente();
+                        cabeza.enlazarAnterior(null);
+                        size--;
+                        return("Eliminado");
+                    }else{
+                        if(actual == ultimo){
+                            ultimo = actual.obtenerAnterior();
+                            ultimo.enlazarSiguiente(null);
+                            size--;
+                            return("Eliminado");
+                        }
+                    }
+                    actual.obtenerAnterior().enlazarSiguiente(actual.obtenerSiguiente());
+                    actual.obtenerSiguiente().enlazarAnterior(actual.obtenerAnterior());
+                    size--;
+                    return("Eliminado");
+                }
+            }
+            actual = actual.obtenerSiguiente();
+        }
+        return("");
+     }
+     
+     
+     
     
     public void eliminarPrimero(){
         cabeza = cabeza.obtenerSiguiente();

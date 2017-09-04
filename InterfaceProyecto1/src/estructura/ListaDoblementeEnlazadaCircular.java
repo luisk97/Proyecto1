@@ -8,8 +8,11 @@ public class ListaDoblementeEnlazadaCircular {
     public ListaDoblementeEnlazadaCircular(){
         primero = null;
         ultimo = null;
+        size = 0;
     }
-    public void add(String nom){
+    
+    
+    public String add(String nom){
         if(primero == null){
             primero = new DocumentoJson(nom);
             ultimo = primero;
@@ -18,6 +21,14 @@ public class ListaDoblementeEnlazadaCircular {
             primero.enlazarAnterior(ultimo);
             ultimo.enlazarAnterior(primero);
         }else{
+            DocumentoJson actual = primero;
+            for(int i = 0;i<size;i++){
+                if(actual.obtenerNombre().equals(nom)){
+                    return("Documento existente");
+                }else{
+                    actual = actual.obtenerSiguiente();
+                }
+            }
             DocumentoJson temp = ultimo;
             DocumentoJson nuevo = new DocumentoJson(nom);
             temp.enlazarSiguiente(nuevo);
@@ -28,7 +39,45 @@ public class ListaDoblementeEnlazadaCircular {
             
         }
         size++;
+        return("Se creo el Documento "+nom);
     }
+    
+    
+    
+    
+    public String insertar(int ind,String nom){
+        DocumentoJson actual = primero;
+        for(int i = 0;i<size;i++){
+                if(actual.obtenerNombre().equals(nom)){
+                    return("Documento existente");
+                }else{
+                    actual = actual.obtenerSiguiente();
+                }
+        }
+        DocumentoJson temp = primero;
+        DocumentoJson nuevo = new DocumentoJson(nom);
+        if(ind == 0){
+            nuevo.enlazarSiguiente(primero);
+            primero.enlazarAnterior(nuevo);
+            ultimo.enlazarSiguiente(nuevo);
+            nuevo.enlazarAnterior(ultimo);
+            primero = nuevo;
+        }else{
+            for(int i = 0;i<(ind-1);i++){
+                temp = temp.obtenerSiguiente();
+            }
+            nuevo.enlazarSiguiente(temp.obtenerSiguiente());
+            nuevo.obtenerSiguiente().enlazarAnterior(nuevo);
+            temp.enlazarSiguiente(nuevo);
+            nuevo.enlazarAnterior(temp);
+        }
+        size++;
+        return("Se incerto a "+nuevo.obtenerNombre()+" en el indice "+ind);
+    }
+    
+    
+    
+    
     
     
     public void addPrimero(String nom){
@@ -54,7 +103,7 @@ public class ListaDoblementeEnlazadaCircular {
     public DocumentoJson obtener(int indice){
         DocumentoJson temp = primero;
         while(0 < indice){
-            temp = temp.obtenerSuiguiente();
+            temp = temp.obtenerSiguiente();
             indice--;
         }
         return temp;
@@ -84,7 +133,7 @@ public class ListaDoblementeEnlazadaCircular {
             DocumentoJson temp = primero;
             for(int i = 0;i < size;i++){
                 lista += (temp.obtenerNombre()+", ");
-                temp = temp.obtenerSuiguiente();
+                temp = temp.obtenerSiguiente();
             }
             return lista;
         }
@@ -92,22 +141,22 @@ public class ListaDoblementeEnlazadaCircular {
     
     public void eliminar(int indice){
         if(indice == 0){
-            primero = primero.obtenerSuiguiente();
+            primero = primero.obtenerSiguiente();
             primero.enlazarAnterior(ultimo);
             ultimo.enlazarSiguiente(primero);
         }else{
             DocumentoJson temp = primero;
             for(int i = 0;i < (indice-1);i++){
-                temp = temp.obtenerSuiguiente();
+                temp = temp.obtenerSiguiente();
             }
-            temp.enlazarSiguiente(temp.obtenerSuiguiente().obtenerSuiguiente());
-            temp.obtenerSuiguiente().enlazarAnterior(temp);
+            temp.enlazarSiguiente(temp.obtenerSiguiente().obtenerSiguiente());
+            temp.obtenerSiguiente().enlazarAnterior(temp);
         }
         size--;
     }
     
     public void eliminarPrimero(){
-        primero = primero.obtenerSuiguiente();
+        primero = primero.obtenerSiguiente();
         primero.enlazarAnterior(ultimo);
         ultimo.enlazarSiguiente(primero);
         size--;
