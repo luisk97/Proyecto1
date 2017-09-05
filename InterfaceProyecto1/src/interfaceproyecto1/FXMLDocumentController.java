@@ -147,10 +147,10 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void buscarJsonNombre(ActionEvent e){
         String nom = txtbucarJsonNombreField.getText();
-        if(lista.obtenerPorNombre(nom) == null){
+        if(lista.obtener(nom) == null){
             labelBuscarJsonNombre.setText("No existe un JsonStore con ese nombre");
         }else{
-            buscado = lista.obtenerPorNombre(nom);
+            buscado = lista.obtener(nom);
             labelBuscarJsonNombre.setText(nom);
             btnIngresarJsonNombre.setDisable(false);
         }
@@ -261,7 +261,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void verificarEliminarNombreJson(ActionEvent e){
         String nom = txtEliminarNombreJsonField.getText();
-        if(lista.obtenerPorNombre(nom) == null){
+        if(lista.obtener(nom) == null){
             labelEliminarJsonNombre.setText("No existe un JsonStore con ese nombre");
         }else{
             labelEliminarJsonNombre.setText(nom);
@@ -322,7 +322,7 @@ public class FXMLDocumentController implements Initializable {
         int ind;
         String IND = txtIndInsertarDocumentoField.getText();
         ind = Integer.parseInt(IND);
-        if(ind > buscado.obtenerLista().size()){
+        if(ind > (buscado.obtenerLista().size()-1)){
             labelInsertarDocumento1.setText("Indice no valido, vuelve a intentar");
         }else{
             labelInsertarDocumento1.setText("Verificado");
@@ -340,6 +340,7 @@ public class FXMLDocumentController implements Initializable {
         labelInsertarDocumento2.setText(buscado.obtenerLista().insertar(ind,txtInsertarDocumentoNombreField.getText()));
         btnInsertarDocumentoDefinitivo.setDisable(true);
         btnContinuarInsertarDocumento.setDisable(false);
+        labelListaDocumentos.setText(buscado.obtenerLista().obtenerLista());
         
     }
     
@@ -359,6 +360,8 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void goBuscarDocumentoJson(ActionEvent e){
+        btnBuscarDocumentoIndice.setDisable(false);
+        btnBuscarDocumentoNombre.setDisable(false);
         fondoBuscarDocumento1.setVisible(true);
         fondoMenuJsonStore.setVisible(false);
     }
@@ -366,14 +369,107 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void atrasBuscarDocumento(ActionEvent e){
         fondoBuscarDocumento1.setVisible(false);
-        fondoBuscarDocumento2.setVisible(false);
+        fondoBuscarIndiceDocumento.setVisible(false);
+        fondoBuscarNombreDocumento.setVisible(false);
+        btnIngresarDocumentoInd.setDisable(true);
+        btnIngresarDocumentoNombre.setDisable(true);
         fondoMenuJsonStore.setVisible(true);
     }
     
     @FXML
     private void buscarDocumentoIndice(ActionEvent e){
-        fondoBuscarDocumento2.setVisible(true);
+        fondoBuscarIndiceDocumento.setVisible(true);
+        btnBuscarDocumentoIndice.setDisable(true);
+        btnBuscarDocumentoNombre.setDisable(true);
+        btnBuscarDocumentoIndice2.setDisable(false);
     }
+    
+    
+    DocumentoJson buscadoDoc;
+    
+    @FXML
+    private void goBuscarDocumentoIndice(ActionEvent e){
+        int ind;
+        String IND = txtBuscarIndiceDocumento.getText();
+        ind = Integer.parseInt(IND);
+        if(ind < (buscado.obtenerLista().size())){
+            buscadoDoc = buscado.obtenerLista().obtener(ind);
+            labelBuscarDocumentoIndice.setText(buscadoDoc.obtenerNombre());
+            btnBuscarDocumentoIndice2.setDisable(true);
+            btnIngresarDocumentoInd.setDisable(false);
+        }else{
+            labelBuscarDocumentoIndice.setText("Indice no valido, vuelve a intentar");
+        }
+    }
+    
+    
+    @FXML
+    private void buscarDocumentoNombre(ActionEvent e){
+        fondoBuscarNombreDocumento.setVisible(true);
+        btnBuscarDocumentoNombre2.setDisable(false);
+        btnBuscarDocumentoIndice.setDisable(true);
+        btnBuscarDocumentoNombre.setDisable(true);
+    }
+    
+    @FXML
+    private void goBuscarDocumentoNombre(ActionEvent e){
+        String nom = txtBuscarDocumentoNombreField.getText();
+        if(buscado.obtenerLista().obtener(nom) == null){
+            labelBuscarDocumentoNombre.setText("No existe un DocumentoJson con ese nombre");
+        }else{
+            buscadoDoc = buscado.obtenerLista().obtener(nom);
+            labelBuscarDocumentoNombre.setText(nom);
+            btnIngresarDocumentoNombre.setDisable(false);
+        }
+    }
+    
+    @FXML
+    private void goIngresarEnDocumento(ActionEvent e){
+        
+    }
+    
+    
+    
+    @FXML
+    private void goEliminarDocumento(ActionEvent e){
+        fondoEliminarDocumento.setVisible(true);
+        btnEliminarNombreDocumento.setDisable(false);
+        btnEliminarIndiceDocumento.setDisable(false);
+        fondoMenuJsonStore.setVisible(false);
+    }
+    
+    @FXML
+    private void atrasEliminarDocumento(ActionEvent e){
+        fondoEliminarDocumento.setVisible(false);
+        fondoMenuJsonStore.setVisible(true);
+        fondoEliminarDocumentoNombre.setVisible(false);
+        btnEliminarDocumentoNombreDef.setDisable(false);
+    }
+    
+    @FXML
+    private void eliminarDocumentoNombre(ActionEvent e){
+        btnEliminarNombreDocumento.setDisable(true);
+        btnEliminarIndiceDocumento.setDisable(true);
+        fondoEliminarDocumentoNombre.setVisible(true);
+    }
+    
+    @FXML
+    private void goEliminarDocumentoNombre(ActionEvent e){
+        String nom = txtEliminarDocumentoNombreField.getText();
+        if(buscado.obtenerLista().obtener(nom) == null){
+            labelEliminarDocumentoNombre.setText("No existe un DocumentoJson con ese nombre");
+        }else{
+            labelEliminarDocumentoNombre.setText(nom);
+            btnEliminarDocumentoNombreDef.setDisable(false);
+        }
+        
+    }
+    
+    @FXML
+    private void eliminarDocumentoNombreDef(ActionEvent e){
+        
+    }
+        
     
     
     
@@ -459,6 +555,35 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button btnVerificarEliminarNombreJson;
     
+    //Botones para buscar DoumentoJson
+    @FXML
+    private Button btnBuscarDocumentoNombre;
+    
+    @FXML
+    private Button btnBuscarDocumentoIndice;
+    
+    @FXML
+    private Button btnBuscarDocumentoIndice2;
+    
+    @FXML
+    private Button btnIngresarDocumentoInd;
+    
+    @FXML
+    private Button btnBuscarDocumentoNombre2;
+    
+    @FXML
+    private Button btnIngresarDocumentoNombre;
+    
+    //Botones para eliminar DocumentoJson
+    @FXML
+    private Button btnEliminarNombreDocumento;
+    
+    @FXML
+    private Button btnEliminarIndiceDocumento;
+    
+    @FXML
+    private Button btnEliminarDocumentoNombreDef;
+    
     
     //labels
     @FXML
@@ -503,6 +628,15 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     public Label labelInsertarDocumento2;
     
+    @FXML
+    public Label labelBuscarDocumentoIndice;
+    
+    @FXML
+    public Label labelBuscarDocumentoNombre;
+    
+    @FXML
+    public Label labelEliminarDocumentoNombre;
+    
     
     
     
@@ -543,6 +677,18 @@ public class FXMLDocumentController implements Initializable {
     private TextField txtInsertarDocumentoNombreField;
     
     
+    @FXML
+    private TextField txtBuscarIndiceDocumento;
+    
+    @FXML
+    private TextField txtBuscarDocumentoNombreField;
+    
+    
+    
+    @FXML
+    private TextField txtEliminarDocumentoNombreField;
+    
+    
     
     //Fondos
     @FXML
@@ -573,6 +719,9 @@ public class FXMLDocumentController implements Initializable {
     private Pane fondoEliminarIndiceJson;
     
     @FXML
+    private Pane fondoEliminarNombreJson;
+    
+    @FXML
     private Pane fondoCrearDocumentoJson;
     
     @FXML
@@ -585,10 +734,16 @@ public class FXMLDocumentController implements Initializable {
     private Pane fondoBuscarDocumento1;
     
     @FXML
-    private Pane fondoBuscarDocumento2;
+    private Pane fondoBuscarIndiceDocumento;
     
     @FXML
-    private Pane fondoEliminarNombreJson;
+    private Pane fondoBuscarNombreDocumento;
+    
+    @FXML
+    private Pane fondoEliminarDocumento;
+    
+    @FXML
+    private Pane fondoEliminarDocumentoNombre;
     
     @FXML
     private Pane fondoPrincipal;

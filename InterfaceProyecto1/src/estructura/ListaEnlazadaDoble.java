@@ -44,7 +44,7 @@ public class ListaEnlazadaDoble {
         return temp;
     }
     
-    public JsonStore obtenerPorNombre(String nombre){
+    public JsonStore obtener(String nombre){
         JsonStore temp = cabeza;
         while(temp != null){
             if(temp.obtenerNombre().equals(nombre)){

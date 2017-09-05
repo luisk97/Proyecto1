@@ -134,7 +134,7 @@
             <Label fx:id="labelPricipalMenuJsonStore" alignment="CENTER" layoutX="102.0" layoutY="17.0" prefHeight="17.0" prefWidth="318.0" text="label" />
             <Button layoutX="183.0" layoutY="86.0" mnemonicParsing="false" onAction="#goCrearDocumentoJson" prefHeight="25.0" prefWidth="155.0" text="Crear DocumentoJson" />
             <Button layoutX="183.0" layoutY="123.0" mnemonicParsing="false" onAction="#goInsertarDocumentoJson" prefHeight="25.0" prefWidth="155.0" text="Insertar DocumentoJson" />
-            <Button layoutX="183.0" layoutY="196.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="155.0" text="Eliminar DocumentoJson" />
+            <Button layoutX="183.0" layoutY="196.0" mnemonicParsing="false" onAction="#goEliminarDocumento" prefHeight="25.0" prefWidth="155.0" text="Eliminar DocumentoJson" />
             <Button layoutY="2.0" mnemonicParsing="false" onAction="#atrasmenuJsonStore" text="Atras" />
             <Button layoutX="183.0" layoutY="160.0" mnemonicParsing="false" onAction="#goBuscarDocumentoJson" prefHeight="25.0" prefWidth="155.0" text="Buscar DocumentoJson" />
             <Button layoutX="174.0" layoutY="276.0" mnemonicParsing="false" text="Cambiar Nombre al JsonStore" />
@@ -143,7 +143,7 @@
             <Button layoutX="174.0" layoutY="310.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="174.0" text="Eliminar este JsonStore" />
          </children>
       </Pane>
-      <Pane fx:id="fondoEliminarStore" layoutX="267.0" layoutY="52.0" prefHeight="114.0" prefWidth="498.0">
+      <Pane fx:id="fondoEliminarStore" layoutX="267.0" layoutY="52.0" prefHeight="114.0" prefWidth="498.0" visible="false">
          <children>
             <Button mnemonicParsing="false" onAction="#atrasEliminarJson" text="Atras" />
             <Label layoutX="145.0" layoutY="25.0" text="Eliminar JsonStore(Base de Datos)">
@@ -155,7 +155,7 @@
             <Button fx:id="btneliminarIndiceJson" layoutX="334.0" layoutY="65.0" mnemonicParsing="false" onAction="#eliminarIndiceJson" text="Por Indice" />
          </children>
       </Pane>
-      <Pane fx:id="fondoEliminarIndiceJson" layoutX="267.0" layoutY="167.0" prefHeight="364.0" prefWidth="498.0">
+      <Pane fx:id="fondoEliminarIndiceJson" layoutX="267.0" layoutY="167.0" prefHeight="364.0" prefWidth="498.0" visible="false">
          <children>
             <Label layoutX="14.0" layoutY="27.0" text="Introdusca el indice del JsonStore que desea Eliminar:">
                <font>
@@ -231,21 +231,21 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button layoutX="90.0" layoutY="65.0" mnemonicParsing="false" text="Por Nombre" />
-            <Button layoutX="329.0" layoutY="65.0" mnemonicParsing="false" onAction="#buscarDocumentoIndice" prefHeight="25.0" prefWidth="81.0" text="Por Indice" />
+            <Button fx:id="btnBuscarDocumentoNombre" layoutX="90.0" layoutY="65.0" mnemonicParsing="false" onAction="#buscarDocumentoNombre" text="Por Nombre" />
+            <Button fx:id="btnBuscarDocumentoIndice" layoutX="329.0" layoutY="65.0" mnemonicParsing="false" onAction="#buscarDocumentoIndice" prefHeight="25.0" prefWidth="81.0" text="Por Indice" />
          </children>
       </Pane>
-      <Pane fx:id="fondoBuscarDocumento2" layoutX="270.0" layoutY="166.0" prefHeight="364.0" prefWidth="498.0" visible="false">
+      <Pane fx:id="fondoBuscarIndiceDocumento" layoutX="270.0" layoutY="166.0" prefHeight="364.0" prefWidth="498.0" visible="false">
          <children>
             <Label layoutX="14.0" layoutY="27.0" text="Introduce el indice del Documento que desea:">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="306.0" layoutY="25.0" prefHeight="25.0" prefWidth="96.0" />
-            <Button layoutX="425.0" layoutY="25.0" mnemonicParsing="false" text="Buscar" />
-            <Label layoutX="15.0" layoutY="95.0" prefHeight="17.0" prefWidth="342.0" text="Label" />
-            <Button layoutX="172.0" layoutY="170.0" mnemonicParsing="false" text="Ingresar en el Documento" />
+            <TextField fx:id="txtBuscarIndiceDocumento" layoutX="306.0" layoutY="25.0" prefHeight="25.0" prefWidth="96.0" />
+            <Button fx:id="btnBuscarDocumentoIndice2" layoutX="425.0" layoutY="25.0" mnemonicParsing="false" onAction="#goBuscarDocumentoIndice" text="Buscar" />
+            <Label fx:id="labelBuscarDocumentoIndice" layoutX="15.0" layoutY="95.0" prefHeight="17.0" prefWidth="342.0" text="Label" />
+            <Button fx:id="btnIngresarDocumentoInd" layoutX="172.0" layoutY="170.0" mnemonicParsing="false" onAction="#goIngresarEnDocumento" text="Ingresar en el Documento" />
          </children>
       </Pane>
       <Pane fx:id="fondoEliminarNombreJson" layoutX="270.0" layoutY="158.0" prefHeight="364.0" prefWidth="498.0" visible="false">
@@ -263,6 +263,48 @@
                </font>
             </Label>
             <Button fx:id="btnEliminarNombreJsonDefinitivo" layoutX="220.0" layoutY="182.0" mnemonicParsing="false" onAction="#eliminarNombreJsonDefinitivo" text="Eliminar" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoBuscarNombreDocumento" layoutX="270.0" layoutY="167.0" prefHeight="364.0" prefWidth="498.0" visible="false">
+         <children>
+            <Label layoutX="14.0" layoutY="25.0" text="Introdusca el nombre del DocumentoJson(Entidad) tal cual:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtBuscarDocumentoNombreField" layoutX="14.0" layoutY="63.0" prefHeight="25.0" prefWidth="410.0" />
+            <Button fx:id="btnBuscarDocumentoNombre2" layoutX="433.0" layoutY="63.0" mnemonicParsing="false" onAction="#goBuscarDocumentoNombre" text="Buscar" />
+            <Label fx:id="labelBuscarDocumentoNombre" layoutX="14.0" layoutY="123.0" prefHeight="17.0" prefWidth="410.0" text="Label" />
+            <Button fx:id="btnIngresarDocumentoNombre" layoutX="172.0" layoutY="182.0" mnemonicParsing="false" text="Ingresar en el Documento" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoEliminarDocumento" layoutX="270.0" layoutY="51.0" prefHeight="114.0" prefWidth="498.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#atrasEliminarDocumento" text="Atras" />
+            <Label layoutX="173.0" layoutY="15.0" text="Eliminar DocumentoJson">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnEliminarNombreDocumento" layoutX="91.0" layoutY="52.0" mnemonicParsing="false" onAction="#eliminarDocumentoNombre" text="Por Nombre" />
+            <Button fx:id="btnEliminarIndiceDocumento" layoutX="326.0" layoutY="52.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="81.0" text="Por Indice" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoEliminarDocumentoNombre" layoutX="270.0" layoutY="158.0" prefHeight="364.0" prefWidth="498.0">
+         <children>
+            <Label layoutX="14.0" layoutY="21.0" text="Introdusca el nombre del DocumentoJson tal cual:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtEliminarDocumentoNombreField" layoutX="14.0" layoutY="54.0" prefHeight="25.0" prefWidth="410.0" />
+            <Button layoutX="432.0" layoutY="54.0" mnemonicParsing="false" onAction="#goEliminarDocumentoNombre" text="Buscar" />
+            <Label fx:id="labelEliminarDocumentoNombre" layoutX="39.0" layoutY="121.0" prefHeight="20.0" prefWidth="342.0" text="Label">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnEliminarDocumentoNombreDef" layoutX="220.0" layoutY="182.0" mnemonicParsing="false" text="Eliminar" />
          </children>
       </Pane>
    </children>

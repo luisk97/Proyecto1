@@ -33,10 +33,9 @@ public class ListaDoblementeEnlazadaCircular {
             DocumentoJson nuevo = new DocumentoJson(nom);
             temp.enlazarSiguiente(nuevo);
             nuevo.enlazarAnterior(temp);
+            nuevo.enlazarSiguiente(primero);
+            primero.enlazarAnterior(nuevo);
             ultimo = nuevo;
-            ultimo.enlazarSiguiente(primero);
-            primero.enlazarAnterior(ultimo);
-            
         }
         size++;
         return("Se creo el Documento "+nom);
@@ -109,6 +108,19 @@ public class ListaDoblementeEnlazadaCircular {
         return temp;
     }
     
+    
+    public DocumentoJson obtener(String nombre){
+        DocumentoJson temp = primero;
+        for(int i = 0; i < size;i++){
+            if(temp.obtenerNombre().equals(nombre)){
+                return temp;
+            }else{
+                temp = temp.obtenerSiguiente();
+            }
+        }
+        return null;
+    }
+    
 //    public String obtenerAnterior(int index){
 //        DocumentoJson temp = primero;
 //        for(int i = 0;i< index;i++){
@@ -154,6 +166,13 @@ public class ListaDoblementeEnlazadaCircular {
         }
         size--;
     }
+    
+    
+    
+    
+    
+    
+    
     
     public void eliminarPrimero(){
         primero = primero.obtenerSiguiente();
