@@ -51,6 +51,48 @@ public class FXMLDocumentController implements Initializable {
         leer = new ObjectInputStream(new FileInputStream("Jsons.txt"));
         lista = (ListaEnlazadaDoble) leer.readObject();
         labelListaStores.setText(lista.obtenerLista());
+        int size = lista.size();
+        TreeItem<String> raiz = new TreeItem<>("Raiz");
+        if(size != 0){
+            JsonStore temp = lista.obtener(0);
+            for(int i = 0;i < size;i++){
+                TreeItem<String> nodo = new TreeItem<>(temp.obtenerNombre());
+                raiz.getChildren().add(nodo);
+                nodo.setExpanded(true);
+                int tamaño = temp.obtenerLista().size();
+                if(tamaño != 0){
+                    DocumentoJson temporal = temp.obtenerLista().obtener(0);
+                    for(int in = 0;in < tamaño;in++){
+                        TreeItem<String> subNodo = new TreeItem<>(temporal.obtenerNombre());
+                        nodo.getChildren().add(subNodo);
+                        subNodo.setExpanded(true);
+                        Atributo atrib = temporal.obtenerLista().obtenerCabeza();
+                        while(atrib != null){
+                            TreeItem<String> subSubNodo = new TreeItem<>(atrib.obtenerNombre());
+                            subNodo.getChildren().add(subSubNodo);
+                            atrib = atrib.obtenerSiguiente();
+                        }
+                        temporal = temporal.obtenerSiguiente();
+                    }
+                }
+               temp = temp.obtenerSiguiente(); 
+            }
+        }
+        arbol.setRoot(raiz);
+        raiz.setExpanded(true);
+//        TreeItem<String> raiz = new TreeItem<>("Raiz");
+//        
+//        TreeItem<String> nodoA = new TreeItem<>("nodoA");
+//        TreeItem<String> nodoB = new TreeItem<>("nodoB");
+//        TreeItem<String> nodoC = new TreeItem<>("nodoC");
+//        raiz.getChildren().addAll(nodoA,nodoB,nodoC);
+//        
+//        TreeItem<String> nodoA1 = new TreeItem<>("nodoA1");
+//        TreeItem<String> nodoB1 = new TreeItem<>("nodoB1");
+//        TreeItem<String> nodoC1 = new TreeItem<>("nodoC1");
+//        nodoA.getChildren().addAll(nodoA1,nodoB1,nodoC1);
+//        
+//        arbol.setRoot(raiz);
     }
     
     
@@ -59,6 +101,7 @@ public class FXMLDocumentController implements Initializable {
         fondoCrearJson.setVisible(true);
         fondoPrincipal.setVisible(false);
     }
+    
     
     @FXML
     private void ingresarJson(ActionEvent e){
@@ -358,13 +401,13 @@ public class FXMLDocumentController implements Initializable {
             requerido = true;
         }else{
             if(rbTipoNinguno.isSelected()){
-                tipoEsp = null;
+                tipoEsp = "";
             }else if(rbTipoForanea.isSelected()){
                 tipoEsp = "llaveForanea";
             }
             if(rbReqSi.isSelected()){
             requerido = true;
-            predeterminado = null;
+            predeterminado = "";
             }else if(rbReqNo.isSelected()){
             requerido = false;
             predeterminado = txtValorDefAtributoField.getText();
@@ -374,6 +417,7 @@ public class FXMLDocumentController implements Initializable {
         labelDefAtributo.setText("Se creo el atributo "+nom);
         buscadoDoc.obtenerLista().verAtributos();
         buscadoDoc.obtenerLista().obtenerAtributo(cont).verCaracteristicas();
+        txtNombreAtributoField.setText("");
         cont++;
     }
     
@@ -440,6 +484,8 @@ public class FXMLDocumentController implements Initializable {
         btnBuscarDocumentoNombre.setDisable(false);
         fondoBuscarDocumento1.setVisible(true);
         fondoMenuJsonStore.setVisible(false);
+        txtBuscarIndiceDocumento.setText("");
+        txtBuscarDocumentoNombreField.setText("");
     }
     
     @FXML
@@ -607,16 +653,17 @@ public class FXMLDocumentController implements Initializable {
         btnInsertarUnObjeto.setDisable(false);
         txtConsultaObjetosArea.setText("");
         atributo = buscadoDoc.obtenerLista().obtenerCabeza();
-        labelCrearObjeto1.setText("Ingrese valor de "+atributo.obtenerNombre());
+        labelCrearObjeto1.setText("Ingrese el valor de "+atributo.obtenerNombre());
     }
     
     @FXML
     private void crearObjetoDef(ActionEvent e){
+        
         atributo.obtenerLista().add(txtCrearObjetoField.getText());
         System.out.println(atributo.obtenerLista().obtenerLista());
         atributo = atributo.obtenerSiguiente();
         if(atributo != null){
-            labelCrearObjeto1.setText("Ingrese valor de "+atributo.obtenerNombre());
+            labelCrearObjeto1.setText("Ingrese el valor de "+atributo.obtenerNombre());
             }if(atributo == null){
                 btnContinuarObjeto.setDisable(false);
                 btnInsertarUnObjeto.setDisable(true);
@@ -629,7 +676,9 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void goConsultaObjeto(ActionEvent e){
         fondoConsultaObjeto.setVisible(true);
+        fondoEliminarObjeto.setVisible(false);
         fondoCrearObjeto.setVisible(false);
+        btnEliminarObjeto.setDisable(true);
         fondoMenuDocumento.setVisible(false);
         Atributo actual;
         int cont = 0;
@@ -656,8 +705,124 @@ public class FXMLDocumentController implements Initializable {
     }
     
     
+    @FXML
+    private void goBuscarObjeto(ActionEvent e){
+        fondoBuscarObjeto.setVisible(true);
+        fondoConsultaObjeto.setVisible(false);
+        btnBuscarLLavePrim.setDisable(false);
+    }
     
     
+    @FXML
+    private void atrasBuscarObjeto(ActionEvent e){
+        fondoBuscarObjeto.setVisible(false);
+        fondoBuscarLlavePrim.setVisible(false);
+        fondoConsultaObjeto.setVisible(true);
+    }
+    
+    
+    @FXML
+    private void goBuscarLlavePrim(ActionEvent e){
+        btnBuscarLLavePrim.setDisable(true);
+        fondoBuscarLlavePrim.setVisible(true);
+        txtBuscarLlavePrimField.setText("");
+        txtBuscarLlavePrimArea.setText("");
+    }
+    
+    @FXML
+    private void buscarLlavePrim(ActionEvent e){
+        Atributo actual = buscadoDoc.obtenerLista().obtenerCabeza();
+        while(actual != null){
+            if(actual.obtenerTipoEspecial().equals("llavePrimaria")){
+                int indice = actual.obtenerLista().obtenerIndice(txtBuscarLlavePrimField.getText());
+                if(indice != -1){
+                    String registro = "";
+                    actual = buscadoDoc.obtenerLista().obtenerCabeza();
+                    while(actual != null){
+                        ObjetoJson temp = actual.obtenerLista().obtener(indice);
+                        registro += (actual.obtenerNombre()+":"+temp.obtenerValor()+",");
+                        actual = actual.obtenerSiguiente();
+                    }
+                    txtBuscarLlavePrimArea.setText("{"+registro+"}");
+                    return;
+                }else{
+                    txtBuscarLlavePrimArea.setText("No existe un ObjetoJson con esa llave primaria");
+                    return;
+                }
+            }else{
+                actual = actual.obtenerSiguiente();
+            }
+        }
+        txtBuscarLlavePrimArea.setText("No existe una llave primaria en este Documento");
+    }
+    
+    
+    @FXML
+    private void goEliminarObjeto(ActionEvent e){
+        fondoConsultaObjeto.setVisible(false);
+        fondoEliminarObjeto.setVisible(true);
+        btnEliminarObjeto.setDisable(true);
+    }
+    
+    int indi;
+    @FXML
+    private void verificarEliminarObjeto(ActionEvent e){
+        Atributo actual = buscadoDoc.obtenerLista().obtenerCabeza();
+        while(actual != null){
+            if(actual.obtenerTipoEspecial().equals("llavePrimaria")){
+                indi = actual.obtenerLista().obtenerIndice(txtEliminarObjetoField.getText());
+                if(indi != -1){
+                    String registro = "";
+                    actual = buscadoDoc.obtenerLista().obtenerCabeza();
+                    while(actual != null){
+                        ObjetoJson temp = actual.obtenerLista().obtener(indi);
+                        registro += (actual.obtenerNombre()+":"+temp.obtenerValor()+",");
+                        actual = actual.obtenerSiguiente();
+                    }
+                    txtEliminarObjetoArea.setText("{"+registro+"}");
+                    btnEliminarObjeto.setDisable(false);
+                    return;
+                }else{
+                    txtEliminarObjetoArea.setText("No existe un ObjetoJson con esa llave primaria");
+                    return;
+                }
+            }else{
+                actual = actual.obtenerSiguiente();
+            }
+        }
+        txtEliminarObjetoArea.setText("No existe una llave primaria en este Documento");
+    }
+    
+    
+    @FXML
+    private void eliminarObjetoDef(ActionEvent e){
+        Atributo actual = buscadoDoc.obtenerLista().obtenerCabeza();
+        while(actual != null){
+            actual.obtenerLista().eliminar(indi);
+            actual = actual.obtenerSiguiente();
+        }
+        txtEliminarObjetoArea.setText("Eliminado!!");
+        btnEliminarObjeto.setDisable(true);
+    }
+    
+//    @FXML
+//    private void atrasEliminarObjeto(ActionEvent e){
+//        fondoConsultaObjeto.setVisible(true);
+//        fondoEliminarObjeto.setVisible(false);
+//    }
+    
+    
+    @FXML
+    private void eliminarTodosObjetos(ActionEvent e){
+        Atributo actual = buscadoDoc.obtenerLista().obtenerCabeza();
+        while(actual != null){
+            while(actual.obtenerLista().estaVacio() != true){
+                actual.obtenerLista().eliminar(0);
+            }
+            actual = actual.obtenerSiguiente();
+        }
+        txtConsultaObjetosArea.setText("");
+    }
     
     
     //Comit
@@ -807,6 +972,17 @@ public class FXMLDocumentController implements Initializable {
     private Button btnInsertarUnObjeto;
     
     
+    //Botones para buscar ObjetoJson
+    @FXML
+    private Button btnBuscarLLavePrim;
+    
+    
+    //Botones para eliminar ObjetosJson
+    @FXML
+    private Button btnEliminarObjeto;
+    
+    
+    
     //labels
     @FXML
     private Label imprime;
@@ -930,10 +1106,24 @@ public class FXMLDocumentController implements Initializable {
     private TextField txtCrearObjetoField;
     
     
+    @FXML
+    private TextField txtBuscarLlavePrimField;
+    
+    @FXML
+    private TextField txtEliminarObjetoField;
+    
+    
+    
     
     //TextArea
     @FXML
     private TextArea txtConsultaObjetosArea;
+    
+    @FXML
+    private TextArea txtBuscarLlavePrimArea;
+    
+    @FXML
+    private TextArea txtEliminarObjetoArea;
     
     
     
@@ -1011,6 +1201,15 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Pane fondoConsultaObjeto;
     
+    @FXML
+    private Pane fondoBuscarObjeto;
+    
+    @FXML
+    private Pane fondoBuscarLlavePrim;
+    
+    @FXML
+    private Pane fondoEliminarObjeto;
+    
     
     //Radio buttons
     //Crear documento
@@ -1044,21 +1243,19 @@ public class FXMLDocumentController implements Initializable {
         txtNombreJsonField.setText("");
         txtIndInsertJsonField.setText("");
         txtIndInsertNombreJsonField.setText("");
-        TreeItem<String> raiz = new TreeItem<>("Raiz");
-        raiz.setExpanded(true);
-        
-        TreeItem<String> nodoA = new TreeItem<>("nodoA");
-        TreeItem<String> nodoB = new TreeItem<>("nodoB");
-        TreeItem<String> nodoC = new TreeItem<>("nodoC");
-        raiz.getChildren().addAll(nodoA,nodoB,nodoC);
-        nodoA.setExpanded(true);
-        
-        TreeItem<String> nodoA1 = new TreeItem<>("nodoA1");
-        TreeItem<String> nodoB1 = new TreeItem<>("nodoB1");
-        TreeItem<String> nodoC1 = new TreeItem<>("nodoC1");
-        nodoA.getChildren().addAll(nodoA1,nodoB1,nodoC1);
-        
-        arbol.setRoot(raiz);
+//        TreeItem<String> raiz = new TreeItem<>("Raiz");
+//        
+//        TreeItem<String> nodoA = new TreeItem<>("nodoA");
+//        TreeItem<String> nodoB = new TreeItem<>("nodoB");
+//        TreeItem<String> nodoC = new TreeItem<>("nodoC");
+//        raiz.getChildren().addAll(nodoA,nodoB,nodoC);
+//        
+//        TreeItem<String> nodoA1 = new TreeItem<>("nodoA1");
+//        TreeItem<String> nodoB1 = new TreeItem<>("nodoB1");
+//        TreeItem<String> nodoC1 = new TreeItem<>("nodoC1");
+//        nodoA.getChildren().addAll(nodoA1,nodoB1,nodoC1);
+//        
+//        arbol.setRoot(raiz);
     }
     
 }

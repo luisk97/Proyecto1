@@ -46,10 +46,10 @@ public class ListaEnlazadaObj implements Serializable{
         return temp;
     }
     
-    public ObjetoJson obtenerPorValor(int num){
+    public ObjetoJson obtenerPorValor(String valor){
         ObjetoJson temp = cabeza;
         while(temp != null){
-            if(temp.obtenerValor().equals(num)){
+            if(temp.obtenerValor().equals(valor)){
                 return temp;
             }else{
                 temp = temp.obtenerSiguiente();
@@ -58,6 +58,19 @@ public class ListaEnlazadaObj implements Serializable{
         return null;
     }
 
+    public int obtenerIndice(String valor){
+        ObjetoJson temp = cabeza;
+        int cont = 0;
+        while(temp != null){
+            if(temp.obtenerValor().equals(valor)){
+                return cont;
+            }else{
+                temp = temp.obtenerSiguiente();
+                cont++;
+            }
+        }
+        return -1;
+    }
     
     public Object obtenerUltimo(){
             return ultimo;
@@ -102,12 +115,11 @@ public class ListaEnlazadaObj implements Serializable{
         size--;
     }
     
-    
-    
     public void eliminarPrimero(){
         cabeza = cabeza.obtenerSiguiente();
         size--;
   }
+    
     
     public int size(){
         return size;
