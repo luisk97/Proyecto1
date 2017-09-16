@@ -16,7 +16,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <TreeView layoutY="51.0" prefHeight="480.0" prefWidth="270.0" />
+      <TreeView fx:id="arbol" layoutY="51.0" onContextMenuRequested="#mouseClick" onMouseClicked="#mouseClick" prefHeight="480.0" prefWidth="270.0" />
       <Pane fx:id="fondoCrearJson" layoutX="267.0" layoutY="51.0" prefHeight="480.0" prefWidth="498.0" style="-fx-background-color: ffffff;" visible="false">
          <children>
             <Button mnemonicParsing="false" onAction="#cancelarCrearJson" prefHeight="26.0" prefWidth="69.0" text="Atras" />
@@ -175,18 +175,40 @@
       <Pane fx:id="fondoCrearDocumentoJson" layoutX="267.0" layoutY="52.0" prefHeight="480.0" prefWidth="498.0" visible="false">
          <children>
             <Button mnemonicParsing="false" onAction="#atrasCrearDocumento" text="Atras" />
-            <Label layoutX="94.0" layoutY="62.0" text="Introduce el nombre del DocumentoJson(Entidad):">
+            <Label layoutX="85.0" layoutY="25.0" text="Introduce el nombre del DocumentoJson(Entidad):">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="txtCrearDocumentoJsonField" layoutX="54.0" layoutY="111.0" prefHeight="25.0" prefWidth="410.0" />
-            <Button layoutX="412.0" layoutY="163.0" mnemonicParsing="false" onAction="#crearDocumentoJson" text="Crear" />
-            <Label fx:id="labelCrearDocumentoJson" layoutX="54.0" layoutY="223.0" prefHeight="17.0" prefWidth="342.0">
+            <TextField fx:id="txtCrearDocumentoJsonField" layoutX="14.0" layoutY="45.0" prefHeight="25.0" prefWidth="410.0" />
+            <Button fx:id="btnCrearDocumento" layoutX="439.0" layoutY="45.0" mnemonicParsing="false" onAction="#crearDocumentoJson" text="Crear" />
+            <Label fx:id="labelCrearDocumentoJson" layoutX="14.0" layoutY="78.0" prefHeight="17.0" prefWidth="342.0" text="Label">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
+            <Button fx:id="btnDefinirAtributo" layoutX="396.0" layoutY="447.0" mnemonicParsing="false" onAction="#definirAtributo" text="Definir Atributo" />
+            <TextField fx:id="txtNombreAtributoField" layoutX="14.0" layoutY="168.0" prefHeight="25.0" prefWidth="365.0" />
+            <Label layoutX="15.0" layoutY="124.0" prefHeight="17.0" prefWidth="129.0" text="Definicion de Atributos" />
+            <Label layoutX="10.0" layoutY="151.0" prefHeight="17.0" prefWidth="201.0" text="Introdusca el nombre del atributo:" />
+            <Label layoutX="12.0" layoutY="211.0" prefHeight="17.0" prefWidth="98.0" text="Tipo del atributo:" />
+            <RadioButton fx:id="rbTipoNinguno" layoutX="14.0" layoutY="293.0" mnemonicParsing="false" selected="true" text="Ninguno">
+               <toggleGroup>
+                  <ToggleGroup fx:id="tipoEsp" />
+               </toggleGroup></RadioButton>
+            <RadioButton fx:id="rbTipoPrimaria" layoutX="90.0" layoutY="293.0" mnemonicParsing="false" text="Llave Primaria" toggleGroup="$tipoEsp" />
+            <RadioButton fx:id="rbTipoForanea" layoutX="193.0" layoutY="293.0" mnemonicParsing="false" text="Llave Foranea" toggleGroup="$tipoEsp" />
+            <Label layoutX="8.0" layoutY="272.0" text="Tipo Especial:" />
+            <Label layoutX="14.0" layoutY="329.0" text="Requerido:" />
+            <RadioButton fx:id="rbReqSi" layoutX="14.0" layoutY="346.0" mnemonicParsing="false" selected="true" text="Si">
+               <toggleGroup>
+                  <ToggleGroup fx:id="requerido" />
+               </toggleGroup></RadioButton>
+            <RadioButton fx:id="rbReqNo" layoutX="61.0" layoutY="346.0" mnemonicParsing="false" text="No" toggleGroup="$requerido" />
+            <Label layoutX="13.0" layoutY="380.0" text="Valor por defecto:" />
+            <TextField fx:id="txtValorDefAtributoField" layoutX="12.0" layoutY="397.0" prefHeight="25.0" prefWidth="301.0" />
+            <Label fx:id="labelDefAtributo" layoutX="15.0" layoutY="439.0" prefHeight="17.0" prefWidth="365.0" text="Label" />
+            <ComboBox fx:id="boxTipoAtributo" layoutX="15.0" layoutY="228.0" prefWidth="150.0" />
          </children>
       </Pane>
       <Pane fx:id="fondoInsertarDocumento1" layoutX="270.0" layoutY="51.0" prefHeight="114.0" prefWidth="498.0" visible="false">
@@ -275,10 +297,10 @@
             <TextField fx:id="txtBuscarDocumentoNombreField" layoutX="14.0" layoutY="63.0" prefHeight="25.0" prefWidth="410.0" />
             <Button fx:id="btnBuscarDocumentoNombre2" layoutX="433.0" layoutY="63.0" mnemonicParsing="false" onAction="#goBuscarDocumentoNombre" text="Buscar" />
             <Label fx:id="labelBuscarDocumentoNombre" layoutX="14.0" layoutY="123.0" prefHeight="17.0" prefWidth="410.0" text="Label" />
-            <Button fx:id="btnIngresarDocumentoNombre" layoutX="172.0" layoutY="182.0" mnemonicParsing="false" text="Ingresar en el Documento" />
+            <Button fx:id="btnIngresarDocumentoNombre" layoutX="172.0" layoutY="182.0" mnemonicParsing="false" onAction="#goIngresarEnDocumento" text="Ingresar en el Documento" />
          </children>
       </Pane>
-      <Pane fx:id="fondoEliminarDocumento" layoutX="270.0" layoutY="51.0" prefHeight="114.0" prefWidth="498.0">
+      <Pane fx:id="fondoEliminarDocumento" layoutX="270.0" layoutY="51.0" prefHeight="114.0" prefWidth="498.0" visible="false">
          <children>
             <Button mnemonicParsing="false" onAction="#atrasEliminarDocumento" text="Atras" />
             <Label layoutX="173.0" layoutY="15.0" text="Eliminar DocumentoJson">
@@ -290,7 +312,7 @@
             <Button fx:id="btnEliminarIndiceDocumento" layoutX="326.0" layoutY="52.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="81.0" text="Por Indice" />
          </children>
       </Pane>
-      <Pane fx:id="fondoEliminarDocumentoNombre" layoutX="270.0" layoutY="158.0" prefHeight="364.0" prefWidth="498.0">
+      <Pane fx:id="fondoEliminarDocumentoNombre" layoutX="270.0" layoutY="158.0" prefHeight="364.0" prefWidth="498.0" visible="false">
          <children>
             <Label layoutX="14.0" layoutY="21.0" text="Introdusca el nombre del DocumentoJson tal cual:">
                <font>
@@ -304,7 +326,36 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button fx:id="btnEliminarDocumentoNombreDef" layoutX="220.0" layoutY="182.0" mnemonicParsing="false" text="Eliminar" />
+            <Button fx:id="btnEliminarDocumentoNombreDef" layoutX="220.0" layoutY="182.0" mnemonicParsing="false" onAction="#eliminarDocumentoNombreDef" text="Eliminar" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoMenuDocumento" layoutX="270.0" layoutY="51.0" prefHeight="480.0" prefWidth="498.0" visible="false">
+         <children>
+            <Button layoutY="2.0" mnemonicParsing="false" onAction="#atrasMenuDocumento" text="Atras" />
+            <Label fx:id="labelMenuDocumento" alignment="CENTER" layoutX="134.0" layoutY="19.0" prefHeight="17.0" prefWidth="230.0" text="Label" />
+            <Button layoutX="223.0" layoutY="87.0" mnemonicParsing="false" onAction="#crearObjeto" text="Crear ObjetoJson" />
+            <Button layoutX="223.0" layoutY="124.0" mnemonicParsing="false" text="Definir Nuevo Atributo" />
+            <Button layoutX="223.0" layoutY="163.0" mnemonicParsing="false" text="Eliminar ObjetoJson" />
+            <Button layoutX="223.0" layoutY="201.0" mnemonicParsing="false" onAction="#goConsultaObjeto" text="Ver Objetos" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoCrearObjeto" layoutX="270.0" layoutY="51.0" prefHeight="480.0" prefWidth="498.0" visible="false">
+         <children>
+            <TextField fx:id="txtCrearObjetoField" layoutX="14.0" layoutY="45.0" prefHeight="25.0" prefWidth="476.0" />
+            <Label fx:id="labelCrearObjeto1" layoutX="14.0" layoutY="14.0" prefHeight="20.0" prefWidth="370.0" text="Label">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="14.0" layoutY="96.0" text="Label" />
+            <Button fx:id="btnInsertarUnObjeto" layoutX="434.0" layoutY="92.0" mnemonicParsing="false" onAction="#crearObjetoDef" text="Insertar" />
+            <Button fx:id="btnContinuarObjeto" layoutX="218.0" layoutY="161.0" mnemonicParsing="false" onAction="#continuarCrearObjeto" text="Continuar" />
+         </children>
+      </Pane>
+      <Pane fx:id="fondoConsultaObjeto" layoutX="270.0" layoutY="51.0" prefHeight="480.0" prefWidth="498.0">
+         <children>
+            <TextArea fx:id="txtConsultaObjetosArea" editable="false" layoutY="88.0" prefHeight="331.0" prefWidth="498.0" />
+            <Button layoutY="2.0" mnemonicParsing="false" onAction="#atrasConsultaObjeto" text="Atras" />
          </children>
       </Pane>
    </children>

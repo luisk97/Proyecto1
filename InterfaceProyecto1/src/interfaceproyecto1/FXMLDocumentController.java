@@ -5,21 +5,29 @@
  */
 package interfaceproyecto1;
 
+import estructura.Atributo;
 import estructura.DocumentoJson;
 import estructura.JsonStore;
+import estructura.ListaEnlazada;
 import estructura.ListaEnlazadaDoble;
+import estructura.ObjetoJson;
+import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TreeView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.control.TreeItem;
 
 /**
  *
@@ -49,7 +57,7 @@ public class FXMLDocumentController implements Initializable {
         fondoCrearJson.setVisible(false);
         fondoPrincipal.setVisible(true);
         labelMensajeCrearJson.setText("");
-        txtNombreJsonField.setText("Ingrese el nombre del JsonStore");
+        txtNombreJsonField.setText("");
     }
     
     
@@ -222,17 +230,16 @@ public class FXMLDocumentController implements Initializable {
     private void eliminarIndiceJson(ActionEvent e){
         btneliminarIndiceJson.setDisable(true);
         btnEliminarNombreJson.setDisable(true);
-        fondoEliminarIndiceJson.setVisible(true);
-        
+        fondoEliminarIndiceJson.setVisible(true);   
     }
+    
     @FXML
     private void verificarEliminarJson(ActionEvent e){
         int ind;
         String IND = txtEliminarIndiceField.getText();
         ind = Integer.parseInt(IND);
         if(ind < lista.size()){
-            JsonStore buscadoElim = lista.obtener(ind);
-            labelEliminarIndiceJson.setText(buscadoElim.obtenerNombre());
+            labelEliminarIndiceJson.setText(lista.obtener(ind).obtenerNombre());
             btnEliminarIndiceJsonDefinitivo.setDisable(false);
             
         }else{
@@ -279,9 +286,20 @@ public class FXMLDocumentController implements Initializable {
     
     
     
+    
+    
+    
+    
+    
+    
     //Aqui terminan los controles principales
     //--------------------------------------------------------------------------------
     //Aqui inician los controles para manipular DocumentosJson
+    
+    
+    
+    
+    
     
     
     
@@ -291,13 +309,55 @@ public class FXMLDocumentController implements Initializable {
         txtCrearDocumentoJsonField.setText("");
         fondoCrearDocumentoJson.setVisible(true);
         fondoMenuJsonStore.setVisible(false);
+        btnDefinirAtributo.setDisable(true);
+        btnCrearDocumento.setDisable(false);
         labelListaDocumentos.setText(buscado.obtenerLista().obtenerLista());
     }
+    
+    private DocumentoJson buscadoDoc;
     
     @FXML
     private void crearDocumentoJson(ActionEvent e){
         labelCrearDocumentoJson.setText(buscado.obtenerLista().add(txtCrearDocumentoJsonField.getText()));
         labelListaDocumentos.setText(buscado.obtenerLista().obtenerLista());
+        buscadoDoc = buscado.obtenerLista().obtener(txtCrearDocumentoJsonField.getText());
+        if(labelCrearDocumentoJson.getText().equals("Documento existente")){
+        }else{
+            btnDefinirAtributo.setDisable(false);
+            btnCrearDocumento.setDisable(true);
+        }
+    }
+    int cont = 0;
+    @FXML
+    private void definirAtributo(ActionEvent e){
+        String nom = txtNombreAtributoField.getText();
+        String valorDef = txtValorDefAtributoField.getText();
+        String tipo = boxTipoAtributo.getValue();
+        String tipoEsp = null;
+        boolean requerido = true;
+        String predeterminado = null;
+        if(rbTipoPrimaria.isSelected()){
+            tipoEsp = "llavePrimaria";
+            requerido = true;
+        }else{
+            if(rbTipoNinguno.isSelected()){
+                tipoEsp = null;
+            }else if(rbTipoForanea.isSelected()){
+                tipoEsp = "llaveForanea";
+            }
+            if(rbReqSi.isSelected()){
+            requerido = true;
+            predeterminado = null;
+            }else if(rbReqNo.isSelected()){
+            requerido = false;
+            predeterminado = txtValorDefAtributoField.getText();
+            }
+        }
+        buscadoDoc.obtenerLista().addAtributo(nom, tipo, tipoEsp, requerido, predeterminado);
+        labelDefAtributo.setText("Se creo el atributo "+nom);
+        buscadoDoc.obtenerLista().verAtributos();
+        buscadoDoc.obtenerLista().obtenerAtributo(cont).verCaracteristicas();
+        cont++;
     }
     
     @FXML
@@ -340,8 +400,7 @@ public class FXMLDocumentController implements Initializable {
         labelInsertarDocumento2.setText(buscado.obtenerLista().insertar(ind,txtInsertarDocumentoNombreField.getText()));
         btnInsertarDocumentoDefinitivo.setDisable(true);
         btnContinuarInsertarDocumento.setDisable(false);
-        labelListaDocumentos.setText(buscado.obtenerLista().obtenerLista());
-        
+        labelListaDocumentos.setText(buscado.obtenerLista().obtenerLista()); 
     }
     
     @FXML
@@ -382,10 +441,10 @@ public class FXMLDocumentController implements Initializable {
         btnBuscarDocumentoIndice.setDisable(true);
         btnBuscarDocumentoNombre.setDisable(true);
         btnBuscarDocumentoIndice2.setDisable(false);
+        labelBuscarDocumentoIndice.setText("");
     }
     
     
-    DocumentoJson buscadoDoc;
     
     @FXML
     private void goBuscarDocumentoIndice(ActionEvent e){
@@ -409,6 +468,7 @@ public class FXMLDocumentController implements Initializable {
         btnBuscarDocumentoNombre2.setDisable(false);
         btnBuscarDocumentoIndice.setDisable(true);
         btnBuscarDocumentoNombre.setDisable(true);
+        labelBuscarDocumentoNombre.setText("");
     }
     
     @FXML
@@ -425,8 +485,20 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void goIngresarEnDocumento(ActionEvent e){
-        
+        fondoBuscarNombreDocumento.setVisible(false);
+        fondoBuscarIndiceDocumento.setVisible(false);
+        fondoBuscarDocumento1.setVisible(false);
+        fondoMenuDocumento.setVisible(true);
+        labelMenuDocumento.setText("Menu de "+buscadoDoc.obtenerNombre());
     }
+    
+    
+    @FXML
+    private void atrasMenuDocumento(ActionEvent e){
+        fondoMenuDocumento.setVisible(false);
+        fondoMenuJsonStore.setVisible(true);
+    }
+    
     
     
     
@@ -443,7 +515,7 @@ public class FXMLDocumentController implements Initializable {
         fondoEliminarDocumento.setVisible(false);
         fondoMenuJsonStore.setVisible(true);
         fondoEliminarDocumentoNombre.setVisible(false);
-        btnEliminarDocumentoNombreDef.setDisable(false);
+        btnEliminarDocumentoNombreDef.setDisable(true);
     }
     
     @FXML
@@ -451,6 +523,7 @@ public class FXMLDocumentController implements Initializable {
         btnEliminarNombreDocumento.setDisable(true);
         btnEliminarIndiceDocumento.setDisable(true);
         fondoEliminarDocumentoNombre.setVisible(true);
+        labelEliminarDocumentoNombre.setText("");
     }
     
     @FXML
@@ -461,15 +534,119 @@ public class FXMLDocumentController implements Initializable {
         }else{
             labelEliminarDocumentoNombre.setText(nom);
             btnEliminarDocumentoNombreDef.setDisable(false);
-        }
-        
+        }   
     }
+    
     
     @FXML
     private void eliminarDocumentoNombreDef(ActionEvent e){
-        
+        String nom = txtEliminarDocumentoNombreField.getText();
+        labelEliminarDocumentoNombre.setText(buscado.obtenerLista().eliminar(nom));
+        labelListaDocumentos.setText(buscado.obtenerLista().obtenerLista());
+        btnEliminarDocumentoNombreDef.setDisable(true);
     }
-        
+    
+    
+    
+    
+    
+    //Aqui terminan los controles para manipular DocumentosJson
+    
+    
+    
+    
+    
+    
+    
+    //Arbol
+    public void mouseClick(MouseEvent e){
+        TreeItem<String> item = arbol.getSelectionModel().getSelectedItem();
+        System.out.println(item.getValue());
+    }
+    
+    
+    
+    
+    
+    
+    
+    //Aqui inician los controles para manipular ObjetosJson
+    
+    
+    
+    
+    
+    
+    
+    private Atributo atributo;
+//    private int contador;
+    
+    @FXML
+    private void crearObjeto(ActionEvent e){
+        fondoCrearObjeto.setVisible(true);
+        fondoMenuDocumento.setVisible(false);
+        btnContinuarObjeto.setDisable(true);
+        btnInsertarUnObjeto.setDisable(false);
+        atributo = buscadoDoc.obtenerLista().obtenerCabeza();
+        labelCrearObjeto1.setText("Ingrese valor de "+atributo.obtenerNombre());
+    }
+    
+    @FXML
+    private void crearObjetoDef(ActionEvent e){
+        atributo.obtenerLista().add(txtCrearObjetoField.getText());
+        System.out.println(atributo.obtenerLista().obtenerLista());
+        atributo = atributo.obtenerSiguiente();
+        if(atributo != null){
+            labelCrearObjeto1.setText("Ingrese valor de "+atributo.obtenerNombre());
+            }if(atributo == null){
+                btnContinuarObjeto.setDisable(false);
+                btnInsertarUnObjeto.setDisable(true);
+        }
+        txtCrearObjetoField.setText("");
+    }
+    
+    
+    @FXML
+    private void continuarCrearObjeto(ActionEvent e){
+        fondoMenuDocumento.setVisible(true);
+        fondoCrearObjeto.setVisible(false);
+    }
+    
+    
+    
+    @FXML
+    private void goConsultaObjeto(ActionEvent e){
+        fondoConsultaObjeto.setVisible(true);
+        fondoMenuDocumento.setVisible(false);
+        Atributo actual;
+        int cont = 0;
+        int ind = buscadoDoc.obtenerLista().obtenerCabeza().obtenerLista().size();
+        for(int i = 0;i < ind;i++){
+            actual = buscadoDoc.obtenerLista().obtenerCabeza();
+            String registro = "";
+            while(actual != null){
+                ObjetoJson temp = actual.obtenerLista().obtener(cont);
+                registro += (actual.obtenerNombre()+":"+temp.obtenerValor()+",");
+                actual = actual.obtenerSiguiente();
+            }
+            txtConsultaObjetosArea.appendText("{"+registro+"}"+"\n\r");
+            cont++;
+        }
+    }
+    
+    
+    @FXML
+    private void atrasConsultaObjeto(ActionEvent e){
+        fondoConsultaObjeto.setVisible(false);
+        fondoMenuDocumento.setVisible(true);
+        txtConsultaObjetosArea.setText("");
+    }
+    
+    
+    
+    
+    
+    
     
     
     
@@ -483,7 +660,12 @@ public class FXMLDocumentController implements Initializable {
             flag = true;
         }
         
-    }
+    } 
+      
+        
+    //treeview
+    @FXML
+    private TreeView<String> arbol;
     
     
     //Botones pagina principal
@@ -542,6 +724,12 @@ public class FXMLDocumentController implements Initializable {
     
     
     //Botones DocumentoJson
+    //Botones crear DocumentoJson
+    @FXML
+    private Button btnDefinirAtributo;
+    @FXML
+    private Button btnCrearDocumento;
+    
     //Botones insertar DocumentoJson
     @FXML
     private Button btnVerificarInsertarDocumento;
@@ -574,6 +762,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button btnIngresarDocumentoNombre;
     
+    
     //Botones para eliminar DocumentoJson
     @FXML
     private Button btnEliminarNombreDocumento;
@@ -583,6 +772,14 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private Button btnEliminarDocumentoNombreDef;
+    
+    
+    //Botones para crear ObjetoJson
+    @FXML
+    private Button btnContinuarObjeto;
+    
+    @FXML
+    private Button btnInsertarUnObjeto;
     
     
     //labels
@@ -617,6 +814,9 @@ public class FXMLDocumentController implements Initializable {
     public Label labelCrearDocumentoJson;
     
     @FXML
+    public Label labelDefAtributo;
+    
+    @FXML
     public Label labelListaDocumentos;
     
     @FXML
@@ -636,6 +836,12 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     public Label labelEliminarDocumentoNombre;
+    
+    @FXML
+    public Label labelMenuDocumento;
+    
+    @FXML
+    public Label labelCrearObjeto1;
     
     
     
@@ -684,10 +890,33 @@ public class FXMLDocumentController implements Initializable {
     private TextField txtBuscarDocumentoNombreField;
     
     
-    
     @FXML
     private TextField txtEliminarDocumentoNombreField;
     
+    
+    @FXML
+    private TextField txtNombreAtributoField;
+    
+    @FXML
+    private TextField txtValorDefAtributoField;
+    
+    
+    @FXML
+    private TextField txtCrearObjetoField;
+    
+    
+    
+    //TextArea
+    @FXML
+    private TextArea txtConsultaObjetosArea;
+    
+    
+    
+    //ComboBox
+    @FXML
+    private ComboBox<String> boxTipoAtributo;
+    
+    ObservableList<String> comboLista = FXCollections.observableArrayList("entero","flotante","cadena","fechaHora");
     
     
     //Fondos
@@ -748,6 +977,36 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Pane fondoPrincipal;
     
+    @FXML
+    private Pane fondoMenuDocumento;
+    
+    @FXML
+    private Pane fondoCrearObjeto;
+    
+    @FXML
+    private Pane fondoConsultaObjeto;
+    
+    
+    //Radio buttons
+    //Crear documento
+    @FXML
+    private RadioButton rbTipoForanea;
+    
+    @FXML
+    private RadioButton rbTipoPrimaria;
+    
+    @FXML
+    private RadioButton rbTipoNinguno;
+    
+    @FXML
+    private RadioButton rbReqSi;
+    
+    @FXML
+    private RadioButton rbReqNo;
+    
+    
+    
+    
     private boolean flag = false;
     
     
@@ -755,11 +1014,27 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Aqui es la primera ejecucion
+        boxTipoAtributo.setItems(comboLista);
         System.out.println("Cargando");
-        txtNombreJsonField.setText("Ingrese el nombre del JsonStore");
+        txtNombreJsonField.setText("");
         txtIndInsertJsonField.setText("");
         txtIndInsertNombreJsonField.setText("");
-    }    
+        TreeItem<String> raiz = new TreeItem<>("Raiz");
+        raiz.setExpanded(true);
+        
+        TreeItem<String> nodoA = new TreeItem<>("nodoA");
+        TreeItem<String> nodoB = new TreeItem<>("nodoB");
+        TreeItem<String> nodoC = new TreeItem<>("nodoC");
+        raiz.getChildren().addAll(nodoA,nodoB,nodoC);
+        nodoA.setExpanded(true);
+        
+        TreeItem<String> nodoA1 = new TreeItem<>("nodoA1");
+        TreeItem<String> nodoB1 = new TreeItem<>("nodoB1");
+        TreeItem<String> nodoC1 = new TreeItem<>("nodoC1");
+        nodoA.getChildren().addAll(nodoA1,nodoB1,nodoC1);
+        
+        arbol.setRoot(raiz);
+    }
     
 }
 

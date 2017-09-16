@@ -136,6 +136,7 @@ public class ListaEnlazadaDoble {
         }else{
             if(indice == 0){
                 cabeza = cabeza.obtenerSiguiente();
+                cabeza.enlazarAnterior(null);
             }else{
                 JsonStore temp = cabeza;
                 for(int i = 0;i < indice;i++){
@@ -195,6 +196,7 @@ public class ListaEnlazadaDoble {
     
     public void eliminarPrimero(){
         cabeza = cabeza.obtenerSiguiente();
+        cabeza.enlazarAnterior(null);
         size--;
   }
     

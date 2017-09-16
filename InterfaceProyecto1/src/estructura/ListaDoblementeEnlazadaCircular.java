@@ -168,7 +168,41 @@ public class ListaDoblementeEnlazadaCircular {
     }
     
     
-    
+    public String eliminar(String nom){
+        DocumentoJson actual = primero;
+        for(int i = 0;i < size;i++){
+            if(actual.obtenerNombre().equals(nom)){
+                if(actual==primero && primero==ultimo){
+                    primero=null;
+                    ultimo=null;
+                    size--;
+                    return("Eliminado");
+                }else{
+                    if(actual == primero){
+                        ultimo.enlazarSiguiente(primero.obtenerSiguiente());
+                        primero = primero.obtenerSiguiente();
+                        primero.enlazarAnterior(ultimo);
+                        size--;
+                        return("Eliminado");
+                    }else{
+                        if(actual == ultimo){
+                            ultimo.obtenerAnterior().enlazarSiguiente(primero);
+                            ultimo = ultimo.obtenerAnterior();
+                            primero.enlazarAnterior(ultimo);
+                            size--;
+                            return("Eliminado");
+                        }
+                    }
+                    actual.obtenerAnterior().enlazarSiguiente(actual.obtenerSiguiente());
+                    actual.obtenerSiguiente().enlazarAnterior(actual.obtenerAnterior());
+                    size--;
+                    return("Eliminado");
+                }
+            }
+            actual = actual.obtenerSiguiente();
+        }
+        return("");
+     }
     
     
     

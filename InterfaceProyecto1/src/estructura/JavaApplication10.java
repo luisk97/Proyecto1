@@ -90,7 +90,7 @@ public class JavaApplication10 {
                                         Object tipoEsp = s.next();
                                         System.out.println("Es requerido si o no:");
                                         String requerido = s.next();
-                                        doc.obtenerLista().addAtributo(nom,tipo,tipoEsp,requerido);
+                                        //doc.obtenerLista().addAtributo(nom,tipo,tipoEsp);
                                         break;
                                     }
                                     case 2:{
@@ -100,7 +100,7 @@ public class JavaApplication10 {
                                     case 3:{
                                         System.out.println("Introdusca el indice de atributo: ");
                                         ind = s.nextInt();
-                                        ObjetoJson obj = doc.obtenerLista().obtenerAtributo(ind);
+                                        Atributo obj = doc.obtenerLista().obtenerAtributo(ind);
                                         obj.verCaracteristicas();
                                         break;
                                     }

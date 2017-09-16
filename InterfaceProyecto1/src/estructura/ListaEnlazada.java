@@ -1,8 +1,8 @@
 package estructura;
 
 public class ListaEnlazada {
-    private ObjetoJson cabeza;
-    private ObjetoJson ultimo;
+    private Atributo cabeza;
+    private Atributo ultimo;
     private int size;
     
     
@@ -10,13 +10,13 @@ public class ListaEnlazada {
         cabeza = null;
     }
     
-    public void addAtributo(String nombre,Object tipo,Object tipoEsp,String requerido){
+    public void addAtributo(String nombre,String tipo,String tipoEsp,boolean requerido,String predefinido){
         if(cabeza==null){
-            cabeza = new ObjetoJson(nombre,tipo,tipoEsp,requerido);
+            cabeza = new Atributo(nombre,tipo,tipoEsp,requerido,predefinido);
             ultimo = cabeza;
         }else{
-        ObjetoJson temp = ultimo;
-        ObjetoJson nuevo = new ObjetoJson(nombre,tipo,tipoEsp,requerido);
+        Atributo temp = ultimo;
+        Atributo nuevo = new Atributo(nombre,tipo,tipoEsp,requerido,predefinido);
         temp.enlazarSiguiente(nuevo);
         ultimo = nuevo;
         }
@@ -25,21 +25,38 @@ public class ListaEnlazada {
     
     public void verAtributos(){
         if(cabeza!=null){
-            ObjetoJson temp = cabeza;
+            Atributo temp = cabeza;
             for(int i = 0;i<size;i++){
-                System.out.println(temp.obtenerNombre());
+                System.out.print(temp.obtenerNombre()+", ");
                 temp = temp.obtenerSiguiente();
             }
         }else{
             System.out.println("No hay atributos");
         }
+        System.out.println("");
     }
     
-    public ObjetoJson obtenerAtributo(int ind){
-        ObjetoJson temp = cabeza;
-            for(int i = 0;i<(size-1);i++){
-                temp = temp.obtenerSiguiente();
-            }
+    public Atributo obtenerAtributo(int ind){
+        Atributo temp = cabeza;
+        for(int i = 0;i<(size-1);i++){
+            temp = temp.obtenerSiguiente();
+        }
         return temp;
+    }
+    
+    public Atributo obtenerCabeza(){
+       return cabeza;
+   }
+    
+    public void addObjeto(Object valor){
+        Atributo temp = cabeza;
+        while(temp != null){
+            temp.obtenerLista().add(valor);
+            temp = temp.obtenerSiguiente();
         }
     }
+    
+    public int size(){
+        return size;
+    }
+}
