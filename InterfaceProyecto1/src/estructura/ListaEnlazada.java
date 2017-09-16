@@ -1,6 +1,8 @@
 package estructura;
 
-public class ListaEnlazada {
+import java.io.Serializable;
+
+public class ListaEnlazada implements Serializable{
     private Atributo cabeza;
     private Atributo ultimo;
     private int size;

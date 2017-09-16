@@ -1,7 +1,9 @@
 
 package estructura;
 
-public class JsonStore {
+import java.io.Serializable;
+
+public class JsonStore implements Serializable{
     private String nombre;
     //private Object valor;
     private ListaDoblementeEnlazadaCircular lista;

@@ -5,11 +5,13 @@
  */
 package estructura;
 
+import java.io.Serializable;
+
 /**
  *
  * @author luisk
  */
-public class ListaEnlazadaObj {
+public class ListaEnlazadaObj implements Serializable{
     private ObjetoJson cabeza;
     private ObjetoJson ultimo;
     private int size;

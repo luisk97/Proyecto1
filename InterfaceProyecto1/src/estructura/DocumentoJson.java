@@ -1,6 +1,8 @@
 package estructura;
 
-public class DocumentoJson {
+import java.io.Serializable;
+
+public class DocumentoJson implements Serializable{
     private String nombre;
     private ListaEnlazada lista;
     //private Object valor;

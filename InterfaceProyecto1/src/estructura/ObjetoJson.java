@@ -5,11 +5,13 @@
  */
 package estructura;
 
+import java.io.Serializable;
+
 /**
  *
  * @author luisk
  */
-public class ObjetoJson {
+public class ObjetoJson implements Serializable{
     private Object valor;
     private ObjetoJson siguiente;
     

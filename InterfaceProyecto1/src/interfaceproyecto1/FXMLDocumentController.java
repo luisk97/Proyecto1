@@ -11,6 +11,12 @@ import estructura.JsonStore;
 import estructura.ListaEnlazada;
 import estructura.ListaEnlazadaDoble;
 import estructura.ObjetoJson;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -35,7 +41,18 @@ import javafx.scene.control.TreeItem;
  */
 public class FXMLDocumentController implements Initializable {
     
-    private ListaEnlazadaDoble lista = new ListaEnlazadaDoble();
+    
+    ObjectInputStream leer;
+    ListaEnlazadaDoble lista;
+    
+    
+    @FXML
+    private void cargarDatos(ActionEvent e) throws FileNotFoundException, IOException, ClassNotFoundException{
+        leer = new ObjectInputStream(new FileInputStream("Jsons.txt"));
+        lista = (ListaEnlazadaDoble) leer.readObject();
+        labelListaStores.setText(lista.obtenerLista());
+    }
+    
     
     @FXML
     private void goCrearJson(ActionEvent e){
@@ -584,9 +601,11 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void crearObjeto(ActionEvent e){
         fondoCrearObjeto.setVisible(true);
+        fondoConsultaObjeto.setVisible(false);
         fondoMenuDocumento.setVisible(false);
         btnContinuarObjeto.setDisable(true);
         btnInsertarUnObjeto.setDisable(false);
+        txtConsultaObjetosArea.setText("");
         atributo = buscadoDoc.obtenerLista().obtenerCabeza();
         labelCrearObjeto1.setText("Ingrese valor de "+atributo.obtenerNombre());
     }
@@ -606,17 +625,11 @@ public class FXMLDocumentController implements Initializable {
     }
     
     
-    @FXML
-    private void continuarCrearObjeto(ActionEvent e){
-        fondoMenuDocumento.setVisible(true);
-        fondoCrearObjeto.setVisible(false);
-    }
-    
-    
     
     @FXML
     private void goConsultaObjeto(ActionEvent e){
         fondoConsultaObjeto.setVisible(true);
+        fondoCrearObjeto.setVisible(false);
         fondoMenuDocumento.setVisible(false);
         Atributo actual;
         int cont = 0;
@@ -644,6 +657,18 @@ public class FXMLDocumentController implements Initializable {
     
     
     
+    
+    
+    
+    //Comit
+    @FXML
+    private void comit(ActionEvent e) throws FileNotFoundException, IOException{
+        FileOutputStream out = new FileOutputStream("Jsons.txt");
+        ObjectOutputStream salida = new ObjectOutputStream(out);
+
+        salida.writeObject(lista);
+        salida.flush();
+    }
     
     
     

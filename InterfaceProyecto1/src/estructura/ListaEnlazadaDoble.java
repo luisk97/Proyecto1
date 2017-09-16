@@ -2,8 +2,9 @@ package estructura;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 
-public class ListaEnlazadaDoble {
+public class ListaEnlazadaDoble implements Serializable{
     
     private JsonStore cabeza;
     private JsonStore ultimo;

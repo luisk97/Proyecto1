@@ -1,6 +1,8 @@
 package estructura;
 
-public class ListaDoblementeEnlazadaCircular {
+import java.io.Serializable;
+
+public class ListaDoblementeEnlazadaCircular implements Serializable{
     private DocumentoJson primero;
     private DocumentoJson ultimo;
     private int size;

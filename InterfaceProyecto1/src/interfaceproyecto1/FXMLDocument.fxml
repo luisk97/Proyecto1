@@ -40,7 +40,8 @@
       </Pane>
       <Pane prefHeight="52.0" prefWidth="768.0" style="-fx-background-color: cc92aa;">
          <children>
-            <Button layoutX="706.0" layoutY="14.0" mnemonicParsing="false" text="Comit" />
+            <Button layoutX="706.0" layoutY="14.0" mnemonicParsing="false" onAction="#comit" text="Comit" />
+            <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cargarDatos" text="Cargar Datos" />
          </children>
       </Pane>
       <Pane fx:id="fondoPrincipal" layoutX="270.0" layoutY="51.0" prefHeight="480.0" prefWidth="498.0" visible="false">
@@ -267,7 +268,7 @@
             <TextField fx:id="txtBuscarIndiceDocumento" layoutX="306.0" layoutY="25.0" prefHeight="25.0" prefWidth="96.0" />
             <Button fx:id="btnBuscarDocumentoIndice2" layoutX="425.0" layoutY="25.0" mnemonicParsing="false" onAction="#goBuscarDocumentoIndice" text="Buscar" />
             <Label fx:id="labelBuscarDocumentoIndice" layoutX="15.0" layoutY="95.0" prefHeight="17.0" prefWidth="342.0" text="Label" />
-            <Button fx:id="btnIngresarDocumentoInd" layoutX="172.0" layoutY="170.0" mnemonicParsing="false" onAction="#goIngresarEnDocumento" text="Ingresar en el Documento" />
+            <Button fx:id="btnIngresarDocumentoInd" disable="true" layoutX="172.0" layoutY="170.0" mnemonicParsing="false" onAction="#goIngresarEnDocumento" text="Ingresar en el Documento" />
          </children>
       </Pane>
       <Pane fx:id="fondoEliminarNombreJson" layoutX="270.0" layoutY="158.0" prefHeight="364.0" prefWidth="498.0" visible="false">
@@ -297,7 +298,7 @@
             <TextField fx:id="txtBuscarDocumentoNombreField" layoutX="14.0" layoutY="63.0" prefHeight="25.0" prefWidth="410.0" />
             <Button fx:id="btnBuscarDocumentoNombre2" layoutX="433.0" layoutY="63.0" mnemonicParsing="false" onAction="#goBuscarDocumentoNombre" text="Buscar" />
             <Label fx:id="labelBuscarDocumentoNombre" layoutX="14.0" layoutY="123.0" prefHeight="17.0" prefWidth="410.0" text="Label" />
-            <Button fx:id="btnIngresarDocumentoNombre" layoutX="172.0" layoutY="182.0" mnemonicParsing="false" onAction="#goIngresarEnDocumento" text="Ingresar en el Documento" />
+            <Button fx:id="btnIngresarDocumentoNombre" disable="true" layoutX="172.0" layoutY="182.0" mnemonicParsing="false" onAction="#goIngresarEnDocumento" text="Ingresar en el Documento" />
          </children>
       </Pane>
       <Pane fx:id="fondoEliminarDocumento" layoutX="270.0" layoutY="51.0" prefHeight="114.0" prefWidth="498.0" visible="false">
@@ -335,7 +336,6 @@
             <Label fx:id="labelMenuDocumento" alignment="CENTER" layoutX="134.0" layoutY="19.0" prefHeight="17.0" prefWidth="230.0" text="Label" />
             <Button layoutX="223.0" layoutY="87.0" mnemonicParsing="false" onAction="#crearObjeto" text="Crear ObjetoJson" />
             <Button layoutX="223.0" layoutY="124.0" mnemonicParsing="false" text="Definir Nuevo Atributo" />
-            <Button layoutX="223.0" layoutY="163.0" mnemonicParsing="false" text="Eliminar ObjetoJson" />
             <Button layoutX="223.0" layoutY="201.0" mnemonicParsing="false" onAction="#goConsultaObjeto" text="Ver Objetos" />
          </children>
       </Pane>
@@ -349,13 +349,16 @@
             </Label>
             <Label layoutX="14.0" layoutY="96.0" text="Label" />
             <Button fx:id="btnInsertarUnObjeto" layoutX="434.0" layoutY="92.0" mnemonicParsing="false" onAction="#crearObjetoDef" text="Insertar" />
-            <Button fx:id="btnContinuarObjeto" layoutX="218.0" layoutY="161.0" mnemonicParsing="false" onAction="#continuarCrearObjeto" text="Continuar" />
+            <Button fx:id="btnContinuarObjeto" layoutX="218.0" layoutY="161.0" mnemonicParsing="false" onAction="#goConsultaObjeto" text="Continuar" />
          </children>
       </Pane>
       <Pane fx:id="fondoConsultaObjeto" layoutX="270.0" layoutY="51.0" prefHeight="480.0" prefWidth="498.0">
          <children>
             <TextArea fx:id="txtConsultaObjetosArea" editable="false" layoutY="88.0" prefHeight="331.0" prefWidth="498.0" />
             <Button layoutY="2.0" mnemonicParsing="false" onAction="#atrasConsultaObjeto" text="Atras" />
+            <Button layoutX="386.0" layoutY="441.0" mnemonicParsing="false" text="Eliminar Objeto" />
+            <Button layoutX="400.0" layoutY="15.0" mnemonicParsing="false" text="Buscar Objeto" />
+            <Button layoutX="400.0" layoutY="56.0" mnemonicParsing="false" onAction="#crearObjeto" prefHeight="25.0" prefWidth="90.0" text="Crear Objeto" />
          </children>
       </Pane>
    </children>
