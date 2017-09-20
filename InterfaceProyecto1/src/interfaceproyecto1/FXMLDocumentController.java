@@ -8,7 +8,6 @@ package interfaceproyecto1;
 import estructura.Atributo;
 import estructura.DocumentoJson;
 import estructura.JsonStore;
-import estructura.ListaEnlazada;
 import estructura.ListaEnlazadaDoble;
 import estructura.ObjetoJson;
 import java.io.FileInputStream;
@@ -41,7 +40,9 @@ import javafx.scene.control.TreeItem;
  */
 public class FXMLDocumentController implements Initializable {
     
-    
+    /**
+     * declaracion de la lista principal y la variable para cargar los datos
+     */
     ObjectInputStream leer;
     ListaEnlazadaDoble lista;
     
@@ -80,19 +81,11 @@ public class FXMLDocumentController implements Initializable {
         }
         arbol.setRoot(raiz);
         raiz.setExpanded(true);
-//        TreeItem<String> raiz = new TreeItem<>("Raiz");
-//        
-//        TreeItem<String> nodoA = new TreeItem<>("nodoA");
-//        TreeItem<String> nodoB = new TreeItem<>("nodoB");
-//        TreeItem<String> nodoC = new TreeItem<>("nodoC");
-//        raiz.getChildren().addAll(nodoA,nodoB,nodoC);
-//        
-//        TreeItem<String> nodoA1 = new TreeItem<>("nodoA1");
-//        TreeItem<String> nodoB1 = new TreeItem<>("nodoB1");
-//        TreeItem<String> nodoC1 = new TreeItem<>("nodoC1");
-//        nodoA.getChildren().addAll(nodoA1,nodoB1,nodoC1);
-//        
-//        arbol.setRoot(raiz);
+        arbol.setShowRoot(false);
+        btninsertarJson.setDisable(false);
+        btnBuscarJson.setDisable(false);
+        btnEliminarJson.setDisable(false);
+        
     }
     
     
@@ -762,6 +755,7 @@ public class FXMLDocumentController implements Initializable {
         fondoConsultaObjeto.setVisible(false);
         fondoEliminarObjeto.setVisible(true);
         btnEliminarObjeto.setDisable(true);
+        txtConsultaObjetosArea.setText("");
     }
     
     int indi;
@@ -781,6 +775,7 @@ public class FXMLDocumentController implements Initializable {
                     }
                     txtEliminarObjetoArea.setText("{"+registro+"}");
                     btnEliminarObjeto.setDisable(false);
+                    System.out.println(indi);
                     return;
                 }else{
                     txtEliminarObjetoArea.setText("No existe un ObjetoJson con esa llave primaria");
@@ -800,6 +795,7 @@ public class FXMLDocumentController implements Initializable {
         while(actual != null){
             actual.obtenerLista().eliminar(indi);
             actual = actual.obtenerSiguiente();
+            System.out.println(indi);
         }
         txtEliminarObjetoArea.setText("Eliminado!!");
         btnEliminarObjeto.setDisable(true);
@@ -823,6 +819,13 @@ public class FXMLDocumentController implements Initializable {
         }
         txtConsultaObjetosArea.setText("");
     }
+    
+    
+    @FXML
+    private void goModificarObjeto(ActionEvent e){
+        
+    }
+    
     
     
     //Comit
@@ -1243,19 +1246,6 @@ public class FXMLDocumentController implements Initializable {
         txtNombreJsonField.setText("");
         txtIndInsertJsonField.setText("");
         txtIndInsertNombreJsonField.setText("");
-//        TreeItem<String> raiz = new TreeItem<>("Raiz");
-//        
-//        TreeItem<String> nodoA = new TreeItem<>("nodoA");
-//        TreeItem<String> nodoB = new TreeItem<>("nodoB");
-//        TreeItem<String> nodoC = new TreeItem<>("nodoC");
-//        raiz.getChildren().addAll(nodoA,nodoB,nodoC);
-//        
-//        TreeItem<String> nodoA1 = new TreeItem<>("nodoA1");
-//        TreeItem<String> nodoB1 = new TreeItem<>("nodoB1");
-//        TreeItem<String> nodoC1 = new TreeItem<>("nodoC1");
-//        nodoA.getChildren().addAll(nodoA1,nodoB1,nodoC1);
-//        
-//        arbol.setRoot(raiz);
     }
     
 }

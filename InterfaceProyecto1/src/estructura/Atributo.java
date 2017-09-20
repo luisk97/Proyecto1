@@ -54,7 +54,5 @@ public class Atributo implements Serializable{
     
     public void prueba(String pValor){
         lista.add(pValor);
-    }
-            
-           
+    }                
 }

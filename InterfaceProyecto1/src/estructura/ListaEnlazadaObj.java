@@ -8,20 +8,27 @@ package estructura;
 import java.io.Serializable;
 
 /**
- *
+ *Esta ee la clase lista que almacenara nos servira para enlazar y recorrer los ObjetosJson de cada atributo
  * @author luisk
  */
 public class ListaEnlazadaObj implements Serializable{
     private ObjetoJson cabeza;
     private ObjetoJson ultimo;
     private int size;
-
+    
+    /**
+     * constructor
+     */
     public ListaEnlazadaObj(){
         cabeza = null;
         ultimo = null;
         size = 0;
     }
     
+    /**
+     * Este metodo nos devuelve un string con una lista de todos los datos que contiene la ListaEnlazadaObj
+     * @return lista
+     */
    public String obtenerLista(){
         ObjetoJson temp = cabeza;
         if(cabeza == null){
@@ -36,7 +43,11 @@ public class ListaEnlazadaObj implements Serializable{
         }
     }
    
-   
+   /**
+    * Nos permite obtener 
+    * @param index
+    * @return 
+    */
     public ObjetoJson obtener(int index){
         ObjetoJson temp = cabeza;
         while(0 < index){
@@ -46,6 +57,11 @@ public class ListaEnlazadaObj implements Serializable{
         return temp;
     }
     
+    /**
+     * se introduce el valor y busca el nodo que lo tenga
+     * @param valor
+     * @return 
+     */
     public ObjetoJson obtenerPorValor(String valor){
         ObjetoJson temp = cabeza;
         while(temp != null){
@@ -58,6 +74,11 @@ public class ListaEnlazadaObj implements Serializable{
         return null;
     }
 
+    /**
+     * se introducce el valor y devuelve el indice en el que se encuentra
+     * @param valor
+     * @return 
+     */
     public int obtenerIndice(String valor){
         ObjetoJson temp = cabeza;
         int cont = 0;
@@ -72,9 +93,13 @@ public class ListaEnlazadaObj implements Serializable{
         return -1;
     }
     
+    /**
+     * regresa el ultimo nodo
+     * @return 
+     */
     public Object obtenerUltimo(){
-            return ultimo;
-        } 
+        return ultimo;
+    } 
 
     
     public void insertar(int ind,int num){
@@ -88,6 +113,10 @@ public class ListaEnlazadaObj implements Serializable{
         size++;
     }
     
+    /**
+     * se introduce el valor y se crea un nuevo nodo con ese valor y se añade a la lista
+     * @param valor 
+     */
     public void add(Object valor){
         if(cabeza == null){
             cabeza = new ObjetoJson(valor);
@@ -101,26 +130,34 @@ public class ListaEnlazadaObj implements Serializable{
         size++;
     }
     
-    
+    /**
+     * se introduce el indice y se elimina el nodo que este en esa posicion
+     * @param indice 
+     */
     public void eliminar(int indice){
         if(indice == 0){
             cabeza = cabeza.obtenerSiguiente();
+        }else if (indice == (size-1)){
+            ObjetoJson temp = cabeza;
+            for(int i = 0;i < (indice-1);i++){
+                temp = temp.obtenerSiguiente();
+            }
+            temp.enlazarSiguiente(temp.obtenerSiguiente().obtenerSiguiente());
+            ultimo = temp;
         }else{
             ObjetoJson temp = cabeza;
             for(int i = 0;i < (indice-1);i++){
                 temp = temp.obtenerSiguiente();
             }
-            temp.enlazarSiguiente(temp.obtenerSiguiente());
+            temp.enlazarSiguiente(temp.obtenerSiguiente().obtenerSiguiente());
         }
         size--;
     }
-    
-    public void eliminarPrimero(){
-        cabeza = cabeza.obtenerSiguiente();
-        size--;
-  }
-    
-    
+
+    /**
+     * regresa el tamaño de la lista
+     * @return 
+     */
     public int size(){
         return size;
     }
