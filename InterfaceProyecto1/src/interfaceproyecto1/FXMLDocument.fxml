@@ -44,7 +44,7 @@
             <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cargarDatos" text="Cargar Datos" />
          </children>
       </Pane>
-      <Pane fx:id="fondoPrincipal" layoutX="270.0" layoutY="51.0" prefHeight="480.0" prefWidth="498.0" visible="false">
+      <Pane fx:id="fondoPrincipal" layoutX="270.0" layoutY="51.0" prefHeight="480.0" prefWidth="498.0">
          <children>
             <Button layoutX="200.0" layoutY="36.0" mnemonicParsing="false" onAction="#goCrearJson" prefHeight="25.0" prefWidth="112.0" text="Crear JsonStore" />
             <Button fx:id="btninsertarJson" disable="true" layoutX="200.0" layoutY="75.0" mnemonicParsing="false" onAction="#goInsertarJson" prefHeight="25.0" prefWidth="112.0" text="Insertar JsonStore" />
@@ -229,7 +229,7 @@
             <Button fx:id="btnContinuarObjeto" layoutX="218.0" layoutY="161.0" mnemonicParsing="false" onAction="#goConsultaObjeto" text="Continuar" />
          </children>
       </Pane>
-      <Pane fx:id="fondoConsultaObjeto" layoutX="270.0" layoutY="51.0" prefHeight="480.0" prefWidth="498.0">
+      <Pane fx:id="fondoConsultaObjeto" layoutX="270.0" layoutY="51.0" prefHeight="480.0" prefWidth="498.0" visible="false">
          <children>
             <TextArea fx:id="txtConsultaObjetosArea" editable="false" layoutY="65.0" prefHeight="364.0" prefWidth="498.0" />
             <Button layoutY="2.0" mnemonicParsing="false" onAction="#atrasConsultaObjeto" text="Atras" />

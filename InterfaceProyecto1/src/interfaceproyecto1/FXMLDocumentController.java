@@ -916,7 +916,6 @@ public class FXMLDocumentController implements Initializable {
             int colIndex = indice ;
             columna.setCellValueFactory(cellData -> 
             new SimpleStringProperty(cellData.getValue().get(colIndex)));
-
             tabla.getColumns().add(columna);
             actual = actual.obtenerSiguiente();
             indice++;
@@ -1182,14 +1181,12 @@ public class FXMLDocumentController implements Initializable {
      */
     private ContextMenu menuDerecho = new ContextMenu();
     private MenuItem itemJ1 = new MenuItem("Eliminar");
-    private MenuItem itemJ2 = new MenuItem("Editar nombre");
     private MenuItem itemJ3 = new MenuItem("Crear Documento");
     /**
      * menu de DocumentoJson  para clic derecho en arbol
      */
     private ContextMenu menuDerechoDoc = new ContextMenu();
     private MenuItem itemD1 = new MenuItem("Eliminar");
-    private MenuItem itemD2 = new MenuItem("Editar nombre");
     private MenuItem itemD3 = new MenuItem("Crear Objeto");
     private MenuItem itemD4 = new MenuItem("Ver Objetos");
     private MenuItem itemD5 = new MenuItem("Buscar Objeto");
@@ -1615,8 +1612,8 @@ public class FXMLDocumentController implements Initializable {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        menuDerecho.getItems().addAll(itemJ1,itemJ2,new SeparatorMenuItem(),itemJ3);
-        menuDerechoDoc.getItems().addAll(itemD1,itemD2,new SeparatorMenuItem(),itemD3,itemD4,itemD5);
+        menuDerecho.getItems().addAll(itemJ1,new SeparatorMenuItem(),itemJ3);
+        menuDerechoDoc.getItems().addAll(itemD1,new SeparatorMenuItem(),itemD3,itemD4,itemD5);
         itemJ1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
