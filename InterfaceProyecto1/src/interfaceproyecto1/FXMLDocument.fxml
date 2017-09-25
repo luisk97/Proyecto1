@@ -40,7 +40,7 @@
       </Pane>
       <Pane prefHeight="52.0" prefWidth="768.0" style="-fx-background-color: cc92aa;">
          <children>
-            <Button layoutX="706.0" layoutY="14.0" mnemonicParsing="false" onAction="#comit" text="Comit" />
+            <Button fx:id="comitSave" layoutX="672.0" layoutY="2.0" mnemonicParsing="false" onAction="#comit" text="Comit" />
             <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cargarDatos" text="Cargar Datos" />
          </children>
       </Pane>
@@ -237,6 +237,13 @@
             <Button layoutX="384.0" layoutY="2.0" mnemonicParsing="false" onAction="#goBuscarObjeto" prefHeight="25.0" prefWidth="106.0" text="Buscar Objeto" />
             <Button layoutX="384.0" layoutY="33.0" mnemonicParsing="false" onAction="#crearObjeto" prefHeight="25.0" prefWidth="106.0" text="Crear Objeto" />
             <Button layoutX="222.0" layoutY="441.0" mnemonicParsing="false" onAction="#eliminarTodosObjetos" text="Eliminar todos los Objetos" />
+            <TableView fx:id="tabla" layoutY="65.0" prefHeight="364.0" prefWidth="498.0" />
+            <RadioButton fx:id="rbTableView" layoutX="147.0" layoutY="25.0" mnemonicParsing="false" onAction="#vistaTablaJson" selected="true" text="TableView">
+               <toggleGroup>
+                  <ToggleGroup fx:id="tablaJson" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="rbJsonView" layoutX="240.0" layoutY="25.0" mnemonicParsing="false" onAction="#vistaTablaJson" text="JsonView" toggleGroup="$tablaJson" />
          </children>
       </Pane>
       <Pane fx:id="fondoBuscarObjeto" layoutX="270.0" layoutY="51.0" prefHeight="114.0" prefWidth="498.0" visible="false">

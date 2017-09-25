@@ -18,9 +18,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import javafx.scene.input.MouseEvent;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -35,11 +39,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 
 /**
@@ -66,14 +75,14 @@ public class FXMLDocumentController implements Initializable {
         if(size != 0){
             JsonStore temp = lista.obtener(0);
             for(int i = 0;i < size;i++){
-                TreeItem<String> nodo = new TreeItem<>(temp.obtenerNombre());
+                TreeItem<String> nodo = new TreeItem<>(temp.obtenerNombre(),new ImageView(carpeta));
                 nodo.setExpanded(true);
                 raiz.getChildren().add(nodo);
                 int tamaño = temp.obtenerLista().size();
                 if(tamaño != 0){
                     DocumentoJson temporal = temp.obtenerLista().obtener(0);
                     for(int in = 0;in < tamaño;in++){
-                        TreeItem<String> subNodo = new TreeItem<>(temporal.obtenerNombre());
+                        TreeItem<String> subNodo = new TreeItem<>(temporal.obtenerNombre(),new ImageView(archivo));
                         subNodo.setExpanded(true);
                         nodo.getChildren().add(subNodo);
                         System.out.println(nodo.getParent());
@@ -117,6 +126,8 @@ public class FXMLDocumentController implements Initializable {
     private void goCrearJson(ActionEvent e){
         fondoCrearJson.setVisible(true);
         fondoPrincipal.setVisible(false);
+        btninsertarJson.setDisable(false);
+        btnBuscarJson.setDisable(false);
     }
     
     /**
@@ -130,7 +141,7 @@ public class FXMLDocumentController implements Initializable {
         }else{
             labelMensajeCrearJson.setText("Se creo el Store "+txtNombreJsonField.getText());
             TreeItem<String> raiz = arbol.getRoot();
-            TreeItem<String> item = new TreeItem<>(txtNombreJsonField.getText());
+            TreeItem<String> item = new TreeItem<>(txtNombreJsonField.getText(),new ImageView(carpeta));
             raiz.getChildren().add(item);
             labelListaStores.setText(lista.obtenerLista());
         }
@@ -196,7 +207,7 @@ public class FXMLDocumentController implements Initializable {
         if(ind<(lista.size())){
             labelInsertarJson2.setText(lista.insertar(ind,txtIndInsertNombreJsonField.getText()));
             TreeItem<String> raiz = arbol.getRoot();
-            TreeItem<String> item = new TreeItem<>(txtIndInsertNombreJsonField.getText());
+            TreeItem<String> item = new TreeItem<>(txtIndInsertNombreJsonField.getText(),new ImageView(carpeta));
             raiz.getChildren().add(item);
         }
         btnVerificarInsertarJson.setDisable(true);
@@ -540,12 +551,13 @@ public class FXMLDocumentController implements Initializable {
         buscadoDoc = buscado.obtenerLista().obtener(txtCrearDocumentoJsonField.getText());
         if(labelCrearDocumentoJson.getText().equals("Documento existente")){
         }else{
-            TreeItem<String> item = arbol.getSelectionModel().getSelectedItem();
-            TreeItem<String> subItem = new TreeItem<>(txtCrearDocumentoJsonField.getText());
-            item.setExpanded(true);
-            item.getChildren().add(subItem);
             btnDefinirAtributo.setDisable(false);
             btnCrearDocumento.setDisable(true);
+            TreeItem<String> item = arbol.getSelectionModel().getSelectedItem();
+            TreeItem<String> subItem = new TreeItem<>(txtCrearDocumentoJsonField.getText(),new ImageView(archivo));
+            item.setExpanded(true);
+            item.getChildren().add(subItem);
+            
         }
     }
     
@@ -894,16 +906,50 @@ public class FXMLDocumentController implements Initializable {
         Atributo actual;
         int contador = 0;
         int ind = buscadoDoc.obtenerLista().obtenerCabeza().obtenerLista().size();
+        data.clear();
+        tabla.getItems().clear();
+        tabla.getColumns().clear();
+        actual = buscadoDoc.obtenerLista().obtenerCabeza();
+        int indice = 0;
+        while(actual!= null){
+            TableColumn<List<String>, String> columna = new TableColumn(actual.obtenerNombre());
+            int colIndex = indice ;
+            columna.setCellValueFactory(cellData -> 
+            new SimpleStringProperty(cellData.getValue().get(colIndex)));
+
+            tabla.getColumns().add(columna);
+            actual = actual.obtenerSiguiente();
+            indice++;
+        }
         for(int i = 0;i < ind;i++){
             actual = buscadoDoc.obtenerLista().obtenerCabeza();
             String registro = "";
+            List<String> row = new ArrayList<String>();
             while(actual != null){
                 ObjetoJson temp = actual.obtenerLista().obtener(contador);
+                row.add(temp.obtenerValor()+"");
                 registro += (actual.obtenerNombre()+":"+temp.obtenerValor()+",");
                 actual = actual.obtenerSiguiente();
             }
+            data.add(row);
             txtConsultaObjetosArea.appendText("{"+registro+"}"+"\n\r");
             contador++;
+        }
+        ObservableList<List<String>> inpData = FXCollections.observableArrayList(data);
+        tabla.setItems(inpData); 
+    }
+    
+    //TableView
+    @FXML
+    private TableView<List<String>> tabla = new TableView<>();
+    List<List<String>> data = new ArrayList<List<String>>();
+    
+    @FXML
+    private void vistaTablaJson(){
+        if(rbTableView.isSelected()){
+            tabla.setVisible(true);
+        }else{
+            tabla.setVisible(false);
         }
     }
     
@@ -1099,13 +1145,6 @@ public class FXMLDocumentController implements Initializable {
     }
     
     
-    @FXML
-    private void goModificarObjeto(ActionEvent e){
-        
-    }
-    
-    
-    
     //Comit
     @FXML
     private void comit(ActionEvent e) throws FileNotFoundException, IOException{
@@ -1162,6 +1201,9 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private Button btnBuscarJson;
+    
+    @FXML
+    private Button comitSave;
     
     
     //Botones para insertar json
@@ -1538,7 +1580,19 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private RadioButton rbReqNo;
     
+    @FXML
+    private RadioButton rbTableView;
     
+    @FXML
+    private RadioButton  rbJsonView;
+    
+    
+    //Imagenes
+    Image carpeta = new Image(getClass().getResourceAsStream("/Images/Carpeta.png"));
+    
+    Image archivo = new Image(getClass().getResourceAsStream("/Images/Archivo.png"));
+    
+    Image save = new Image(getClass().getResourceAsStream("/Images/save.png"));
     
     
     private boolean flag = false;
@@ -1553,6 +1607,7 @@ public class FXMLDocumentController implements Initializable {
         txtNombreJsonField.setText("");
         txtIndInsertJsonField.setText("");
         txtIndInsertNombreJsonField.setText("");
+        comitSave.setGraphic(new ImageView(save));
         try {
             cargarDatos();
         } catch (IOException ex) {
@@ -1594,6 +1649,8 @@ public class FXMLDocumentController implements Initializable {
         itemD5.setOnAction(event ->{
             goBuscarObjeto();
         });
+        TableColumn columna = new TableColumn("Ejemplo");
+        tabla.getColumns().add(columna);
     }
     
 }
