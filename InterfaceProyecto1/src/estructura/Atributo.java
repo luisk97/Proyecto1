@@ -1,7 +1,6 @@
 package estructura;
 
 import java.io.Serializable;
-import java.util.Scanner;
 
 public class Atributo implements Serializable{
     private Atributo siguiente;

@@ -52,4 +52,5 @@ public class JsonStore implements Serializable{
     public JsonStore obtenerAnterior(){
         return anterior;
     }
+
 }

@@ -93,6 +93,23 @@ public class ListaEnlazadaObj implements Serializable{
         return -1;
     }
     
+    
+    public int obtenerIndices(String valor,int cont){
+        ObjetoJson temp = cabeza;
+        for(int i = 0;i <cont;i++){
+            temp = temp.obtenerSiguiente();
+        }
+        while(temp != null){
+            if(temp.obtenerValor().equals(valor)){
+                return cont;
+            }else{
+                temp = temp.obtenerSiguiente();
+                cont++;
+            }
+        }
+        return -1;
+    }
+    
     /**
      * regresa el ultimo nodo
      * @return 
@@ -128,6 +145,28 @@ public class ListaEnlazadaObj implements Serializable{
             ultimo = nuevo;
             }
         size++;
+    }
+    
+    public String addComoLlave(Object valor){
+        if(cabeza == null){
+            cabeza = new ObjetoJson(valor);
+            ultimo = cabeza;
+        }else{
+            ObjetoJson actual = cabeza;
+            while(actual != null){
+                if(actual.obtenerValor().equals(valor)){
+                    return("existe");
+                }else{
+                    actual = actual.obtenerSiguiente();
+                }
+            }
+            ObjetoJson temp = ultimo;
+            ObjetoJson nuevo = new ObjetoJson(valor);
+            temp.enlazarSiguiente(nuevo);
+            ultimo = nuevo;
+            }
+        size++;
+        return("");
     }
     
     /**
