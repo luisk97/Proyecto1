@@ -2,18 +2,30 @@ package estructura;
 
 import java.io.Serializable;
 
+/**
+ * En esta clase se define que este tipo de lista permitira recorrer los nodos DocumentoJson
+ * @author luisk
+ */
 public class ListaDoblementeEnlazadaCircular implements Serializable{
     private DocumentoJson primero;
     private DocumentoJson ultimo;
     private int size;
     
+    /**
+     * Constructor
+     */
     public ListaDoblementeEnlazadaCircular(){
         primero = null;
         ultimo = null;
         size = 0;
     }
     
-    
+    /**
+     * Este metodo permitira anadir nuevos DocumentoJson a al lista verificara
+     * que el DocumentoJson no exita ya.
+     * @param nom
+     * @return
+     */
     public String add(String nom){
         if(primero == null){
             primero = new DocumentoJson(nom);
@@ -43,9 +55,12 @@ public class ListaDoblementeEnlazadaCircular implements Serializable{
         return("Se creo el Documento "+nom);
     }
     
-    
-    
-    
+    /**
+     * Nos permite insertar un DocumentoJson en un indice especifico
+     * @param ind
+     * @param nom
+     * @return
+     */
     public String insertar(int ind,String nom){
         DocumentoJson actual = primero;
         for(int i = 0;i<size;i++){
@@ -76,11 +91,10 @@ public class ListaDoblementeEnlazadaCircular implements Serializable{
         return("Se incerto a "+nuevo.obtenerNombre()+" en el indice "+ind);
     }
     
-    
-    
-    
-    
-    
+    /**
+     * Permitira anadir un DocumentoJson como primero de la lista
+     * @param nom
+     */
     public void addPrimero(String nom){
         if(primero == null){
             primero = new DocumentoJson(nom);
@@ -101,6 +115,11 @@ public class ListaDoblementeEnlazadaCircular implements Serializable{
         size++;
     }
     
+    /**
+     * Se retornara el DocumentoJson que se encuentre en el indice especificado
+     * @param indice
+     * @return
+     */
     public DocumentoJson obtener(int indice){
         DocumentoJson temp = primero;
         while(0 < indice){
@@ -110,7 +129,11 @@ public class ListaDoblementeEnlazadaCircular implements Serializable{
         return temp;
     }
     
-    
+    /**
+     * Se retornara el Documento Json con el nombre especificado
+     * @param nombre
+     * @return
+     */
     public DocumentoJson obtener(String nombre){
         DocumentoJson temp = primero;
         for(int i = 0; i < size;i++){
@@ -123,22 +146,18 @@ public class ListaDoblementeEnlazadaCircular implements Serializable{
         return null;
     }
     
-//    public String obtenerAnterior(int index){
-//        DocumentoJson temp = primero;
-//        for(int i = 0;i< index;i++){
-//            temp = temp.obtenerSuiguiente();
-//        }
-//        return temp.obtenerAnterior().obtenerNombre();
-//    }
-//    
-   public DocumentoJson obtenerUltimo(){
+    /**
+     * Retornara el ultimo DocumentoJson de la lista
+     * @return
+     */
+    public DocumentoJson obtenerUltimo(){
            return ultimo;
-        } 
-//    public Object obtenerPrimero(){
-//        return primero;
-//    }
-
+    } 
     
+    /**
+     * Retornara un String con el nombre de todos los documentosJson que se encuentren en lista
+     * @return
+     */
     public String obtenerLista(){
         if(primero == null){
             return("JsonStore vacio.");
@@ -153,6 +172,10 @@ public class ListaDoblementeEnlazadaCircular implements Serializable{
         }
     }
     
+    /**
+     * Se eliminara el DocumentoJson que se encuentre en el indice ingresado
+     * @param indice
+     */
     public void eliminar(int indice){
         if(indice == 0){
             primero = primero.obtenerSiguiente();
@@ -169,7 +192,11 @@ public class ListaDoblementeEnlazadaCircular implements Serializable{
         size--;
     }
     
-    
+    /**
+     * Se eliminara El DocumentoJson que posea el nombre ingresado
+     * @param nom
+     * @return
+     */
     public String eliminar(String nom){
         DocumentoJson actual = primero;
         for(int i = 0;i < size;i++){
@@ -206,10 +233,9 @@ public class ListaDoblementeEnlazadaCircular implements Serializable{
         return("");
      }
     
-    
-    
-    
-    
+    /**
+     *Se eliminara el primer nodo DocumentoJson de la lista
+     */
     public void eliminarPrimero(){
         primero = primero.obtenerSiguiente();
         primero.enlazarAnterior(ultimo);
@@ -217,10 +243,18 @@ public class ListaDoblementeEnlazadaCircular implements Serializable{
         size--;
     }
     
+    /**
+     * Devolvera el tamano de la lista
+     * @return
+     */
     public int size(){
         return size;
     }
     
+    /**
+     * se verificara si la lista esta vacia
+     * @return
+     */
     public boolean estaVacio(){
         return (primero==null);
     }

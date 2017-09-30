@@ -4,19 +4,28 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 
+/**
+ * En esta clase se define que este tipo de lista permitira recorrer los nodos JsonStore
+ * @author luisk
+ */
 public class ListaEnlazadaDoble implements Serializable{
-    
     private JsonStore cabeza;
     private JsonStore ultimo;
     private int size;
     
+    /**
+     * Constructor
+     */
     public ListaEnlazadaDoble(){
         cabeza = null;
         ultimo = null;
         size = 0;
     }
     
-    
+    /**
+     * Retorna un String con todos los JsonStore contenidos dentro de la lista 
+     * @return
+     */
     public String obtenerLista(){
         JsonStore temp = cabeza;
         if(cabeza == null){
@@ -31,11 +40,19 @@ public class ListaEnlazadaDoble implements Serializable{
         }
     }
     
-    
+    /**
+     * retorna el tamaño de la lista
+     * @return
+     */
     public int imprimirSize(){
         return size;
     }
     
+    /**
+     * Retorna el JsonStore que se encuentra en el indice especificado
+     * @param index
+     * @return
+     */
     public JsonStore obtener(int index){
         JsonStore temp = cabeza;
         while(0 < index){
@@ -45,6 +62,11 @@ public class ListaEnlazadaDoble implements Serializable{
         return temp;
     }
     
+    /**
+     * Devuelve el JsonStore con el nombre especificado
+     * @param nombre
+     * @return
+     */
     public JsonStore obtener(String nombre){
         JsonStore temp = cabeza;
         while(temp != null){
@@ -56,21 +78,22 @@ public class ListaEnlazadaDoble implements Serializable{
         }
         return null;
     }
-//    public Object obtenerAnterior(int index){
-//        JsonStore temp = cabeza;
-//        for(int i = 0;i< index;i++){
-//            temp = temp.obtenerSiguiente();
-//        }
-//        return temp.obtenerAnterior().obtenerNombre();
-//    }
     
+    /**
+     * Retorna el JsonStore que se ecuentra en la variable ultimo
+     * @return
+     */
     public Object obtenerUltimo(){
             return ultimo;
-        } 
-//    public Object obtenerPrimero(){
-//        return cabeza;
-//    }
+    } 
     
+    /**
+     * Nos permite incertar un JsonStore en un indice especifico ademas de verificar 
+     * si este ya existe
+     * @param ind
+     * @param nom
+     * @return
+     */
     public String insertar(int ind,String nom){
         JsonStore actual = cabeza;
         while(actual != null){
@@ -100,9 +123,11 @@ public class ListaEnlazadaDoble implements Serializable{
         return("Se incerto a "+nuevo.obtenerNombre()+" en el indice "+ind);
     }
         
-    
-    
-    
+    /**
+     * Nos permite añadir un nuevo JsonStore ademas de verificar si este ya existe
+     * @param nom
+     * @return
+     */
     public String add(String nom){
         if(cabeza == null){
             cabeza = new JsonStore(nom);
@@ -128,8 +153,10 @@ public class ListaEnlazadaDoble implements Serializable{
         return("Se creo el Store: "+ nom);
     }
     
-    
-    
+    /**
+     * Nos permite eliminar el JsonStore que se encuentra en el indice especificado
+     * @param indice
+     */
     public void eliminar(int indice){
         if(indice == 0 && cabeza == ultimo){
             cabeza=null;
@@ -155,10 +182,12 @@ public class ListaEnlazadaDoble implements Serializable{
         size--;
     }
     
-    
-    
-    
-     public String eliminar(String nom){
+    /**
+     * Nos permite eliminar el JsonStore con el nombre ingresado
+     * @param nom
+     * @return
+     */
+    public String eliminar(String nom){
         JsonStore actual = cabeza;
         while(actual != null){
             if(actual.obtenerNombre().equals(nom)){
@@ -192,23 +221,30 @@ public class ListaEnlazadaDoble implements Serializable{
         return("");
      }
      
-     
-     
-    
+    /**
+     * Elimina el primer nodo JsonStore de la lista
+     */
     public void eliminarPrimero(){
         cabeza = cabeza.obtenerSiguiente();
         cabeza.enlazarAnterior(null);
         size--;
   }
     
+    /**
+     * retorna el tamaño de la lista
+     * @return
+     */
     public int size(){
         return size;
     }
     
+    /**
+     * Verifica si la lista esta vacia
+     * @return
+     */
     public boolean estaVacio(){
         return (cabeza==null);
     }
-    
     public void commit(){
         File file = new File("ListaEnlazadaDoble\\JsonStores.txt");
         if(!file.exists()){
@@ -220,10 +256,6 @@ public class ListaEnlazadaDoble implements Serializable{
             }
         }else{
             try{
-//            FileWriter fw = new FileWriter(file,true);
-//            fw.append("Primera linea Hola!!");
-//            fw.append("Continua linea Hola!!");
-//            fw.close();
                 PrintWriter pw = new PrintWriter(file);
                 pw.println("Primera linea");
                 pw.println("Segunda linea");

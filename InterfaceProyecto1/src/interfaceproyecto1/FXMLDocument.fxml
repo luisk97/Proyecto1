@@ -20,14 +20,6 @@
       <Pane fx:id="fondoCrearJson" layoutX="267.0" layoutY="51.0" prefHeight="480.0" prefWidth="498.0" style="-fx-background-color: ffffff;" visible="false">
          <children>
             <Button mnemonicParsing="false" onAction="#cancelarCrearJson" prefHeight="26.0" prefWidth="69.0" text="Atras" />
-            <Label alignment="CENTER" layoutX="216.0" layoutY="6.0" prefHeight="25.0" prefWidth="155.0" style="-fx-background-color: ffaaff;" text="HOLA!!!!">
-               <cursor>
-                  <Cursor fx:constant="NONE" />
-               </cursor>
-               <effect>
-                  <ColorAdjust saturation="-0.16" />
-               </effect>
-            </Label>
             <Label layoutX="99.0" layoutY="88.0" prefHeight="25.0" prefWidth="210.0" text="Nombre del JsonStore">
                <font>
                   <Font size="17.0" />
@@ -62,7 +54,7 @@
             </Label>
             <TextField fx:id="txtIndInsertJsonField" layoutX="323.0" layoutY="39.0" prefHeight="25.0" prefWidth="69.0" />
             <Button fx:id="btnVerificarInsertarJson" layoutX="424.0" layoutY="39.0" mnemonicParsing="false" onAction="#goInsertarJson2" text="Verificar" />
-            <Label fx:id="labelInsertarJson1" layoutX="14.0" layoutY="74.0" prefHeight="25.0" prefWidth="410.0" style="-fx-background-color: f14;">
+            <Label fx:id="labelInsertarJson1" layoutX="14.0" layoutY="74.0" prefHeight="25.0" prefWidth="410.0">
                <font>
                   <Font size="14.0" />
                </font>
@@ -79,7 +71,7 @@
             </Label>
             <TextField fx:id="txtIndInsertNombreJsonField" layoutX="14.0" layoutY="59.0" prefHeight="26.0" prefWidth="476.0" />
             <Button fx:id="btnInsertarJson2" layoutX="432.0" layoutY="100.0" mnemonicParsing="false" onAction="#goInsertarJson3" text="Insertar" />
-            <Label fx:id="labelInsertarJson2" layoutX="14.0" layoutY="144.0" prefHeight="25.0" prefWidth="410.0" style="-fx-background-color: f14;">
+            <Label fx:id="labelInsertarJson2" layoutX="14.0" layoutY="144.0" prefHeight="25.0" prefWidth="410.0">
                <font>
                   <Font size="14.0" />
                </font>

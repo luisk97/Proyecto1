@@ -23,13 +23,11 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -46,7 +44,6 @@ import javafx.scene.control.TreeView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -64,7 +61,15 @@ public class FXMLDocumentController implements Initializable {
     ListaEnlazadaDoble lista;
 //    ListaEnlazadaDoble lista = new ListaEnlazadaDoble();
     
-    
+    /**
+     * En este metodo se cargarantodos los datos desde memoria y se incertaran en el arbol, 
+     * ademas se da al arbol la propiedad del ContextMenu al precionar click derecho que
+     * se deplegara uno de los dos que se definieron dependiendo de si lo que se preciona 
+     * es un JsonStore o un DocumentoJson
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws ClassNotFoundException 
+     */
     @FXML
     private void cargarDatos() throws FileNotFoundException, IOException, ClassNotFoundException{
         leer = new ObjectInputStream(new FileInputStream("Jsons.txt"));
@@ -136,14 +141,18 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     private void ingresarJson(ActionEvent e){
-        if(lista.add(txtNombreJsonField.getText()).equals("Store existente")){
-            labelMensajeCrearJson.setText("Store Existente");
+        if(txtNombreJsonField.getText().equals("")){
+            labelMensajeCrearJson.setText("No se ingreso ningun nombre, vuelve a intentar");
         }else{
-            labelMensajeCrearJson.setText("Se creo el Store "+txtNombreJsonField.getText());
-            TreeItem<String> raiz = arbol.getRoot();
-            TreeItem<String> item = new TreeItem<>(txtNombreJsonField.getText(),new ImageView(carpeta));
-            raiz.getChildren().add(item);
-            labelListaStores.setText(lista.obtenerLista());
+            if(lista.add(txtNombreJsonField.getText()).equals("Store existente")){
+                labelMensajeCrearJson.setText("Store Existente");
+            }else{
+                labelMensajeCrearJson.setText("Se creo el Store "+txtNombreJsonField.getText());
+                TreeItem<String> raiz = arbol.getRoot();
+                TreeItem<String> item = new TreeItem<>(txtNombreJsonField.getText(),new ImageView(carpeta));
+                raiz.getChildren().add(item);
+                labelListaStores.setText(lista.obtenerLista());
+            }
         }
     }
     
@@ -177,12 +186,18 @@ public class FXMLDocumentController implements Initializable {
      * @param e 
      */
     @FXML
-    private void goInsertarJson2(ActionEvent e){
-        int ind;
+    private void goInsertarJson2(){
+        int ind = 0;
         String IND = txtIndInsertJsonField.getText();
-        ind = Integer.parseInt(IND);
+        try{
+            ind = Integer.parseInt(IND);
+        }catch(NumberFormatException e){
+            labelInsertarJson1.setText("No se introdujo un valor valido,vuelve a intentar!");
+            return;
+        }
         if(ind < lista.size()){
             fondoInsertarJson2.setVisible(true);
+            txtIndInsertJsonField.setDisable(true);
             labelInsertarJson1.setText("Verificado");
             btnVerificarInsertarJson.setDisable(true);
         }else{
@@ -196,24 +211,32 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     private void goInsertarJson3(){
-        int ind = 0;
-        String IND = txtIndInsertJsonField.getText();
-        try{
-        ind = Integer.parseInt(IND);
-        }catch(NumberFormatException e){
-            labelInsertarJson2.setText("No se introdujo un un valor numerico");
-            return;
+        if(txtIndInsertNombreJsonField.getText().equals("")){
+            labelInsertarJson2.setText("No se intrdujo ningun valor");
+        }else{
+            int ind = 0;
+            String IND = txtIndInsertJsonField.getText();
+            try{
+                ind = Integer.parseInt(IND);
+            }catch(NumberFormatException e){
+                labelInsertarJson1.setText("No se introdujo un valor valido,vuelve a intentar!");
+                return;
+            }
+            if(ind<(lista.size())){
+                if(lista.insertar(ind,txtIndInsertNombreJsonField.getText()).equals("Store existente")){
+                    labelInsertarJson2.setText("Store Existente");
+                    return;
+                }else{
+                    TreeItem<String> raiz = arbol.getRoot();
+                    TreeItem<String> item = new TreeItem<>(txtIndInsertNombreJsonField.getText(),new ImageView(carpeta));
+                    raiz.getChildren().add(item);
+                }
+            }
+            btnVerificarInsertarJson.setDisable(true);
+            btnInsertarJson2.setDisable(true);
+            btnContinuarInsertarJson.setDisable(false);
+            labelListaStores.setText(lista.obtenerLista());
         }
-        if(ind<(lista.size())){
-            labelInsertarJson2.setText(lista.insertar(ind,txtIndInsertNombreJsonField.getText()));
-            TreeItem<String> raiz = arbol.getRoot();
-            TreeItem<String> item = new TreeItem<>(txtIndInsertNombreJsonField.getText(),new ImageView(carpeta));
-            raiz.getChildren().add(item);
-        }
-        btnVerificarInsertarJson.setDisable(true);
-        btnInsertarJson2.setDisable(true);
-        btnContinuarInsertarJson.setDisable(false);
-        labelListaStores.setText(lista.obtenerLista());
     }
     
     /**
@@ -264,10 +287,15 @@ public class FXMLDocumentController implements Initializable {
      * @param e 
      */
     @FXML
-    private void buscarJsonIndice(ActionEvent e){
+    private void buscarJsonIndice(){
         int ind;
         String IND = txtBuscarIndiceField.getText();
-        ind = Integer.parseInt(IND);
+        try{
+            ind = Integer.parseInt(IND);
+        }catch(NumberFormatException e){
+            labelBuscarJsonIndice.setText("No se introdujo un valor valido,vuelve a intentar!");
+            return;
+        }
         if(ind < lista.size()){
             buscado = lista.obtener(ind);
             labelBuscarJsonIndice.setText(buscado.obtenerNombre());
@@ -296,13 +324,17 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     private void buscarJsonNombre(ActionEvent e){
-        String nom = txtbucarJsonNombreField.getText();
-        if(lista.obtener(nom) == null){
-            labelBuscarJsonNombre.setText("No existe un JsonStore con ese nombre");
+        if(txtbucarJsonNombreField.getText().equals("")){
+            labelBuscarJsonNombre.setText("No se introdujo un valor");
         }else{
-            buscado = lista.obtener(nom);
-            labelBuscarJsonNombre.setText(nom);
-            btnIngresarJsonNombre.setDisable(false);
+            String nom = txtbucarJsonNombreField.getText();
+            if(lista.obtener(nom) == null){
+                labelBuscarJsonNombre.setText("No existe un JsonStore con ese nombre");
+            }else{
+                buscado = lista.obtener(nom);
+                labelBuscarJsonNombre.setText(nom);
+                btnIngresarJsonNombre.setDisable(false);
+            }
         }
     }
     
@@ -361,118 +393,9 @@ public class FXMLDocumentController implements Initializable {
     }
     
     /**
-     * cambia de escenario
-     * @param e 
+     * Se introduce el nombre del Store que se dea eliminar
+     * @param nom 
      */
-//    @FXML
-//    private void goEliminarJson(ActionEvent e){
-//        btneliminarIndiceJson.setDisable(false);
-//        btnEliminarNombreJson.setDisable(false);
-//        fondoEliminarStore.setVisible(true);
-//        fondoPrincipal.setVisible(false);
-//    }
-    
-    /**
-     * cambia de escenario
-     * @param e 
-     */
-//    @FXML
-//    private void atrasEliminarJson(ActionEvent e){
-//        fondoEliminarStore.setVisible(false);
-//        fondoPrincipal.setVisible(true);
-//        fondoEliminarIndiceJson.setVisible(false);
-//        fondoEliminarNombreJson.setVisible(false);
-//        labelEliminarIndiceJson.setText("");
-//        labelEliminarJsonNombre.setText("");
-//        btnVerificarEliminarIndJson.setDisable(false);
-//        btnVerificarEliminarNombreJson.setDisable(false);
-//        btnEliminarIndiceJsonDefinitivo.setDisable(true);
-//        btnEliminarNombreJsonDefinitivo.setDisable(true);
-//    }
-    
-    /**
-     * cambia de escenario
-     * @param e 
-     */
-//    @FXML
-//    private void eliminarIndiceJson(ActionEvent e){
-//        btneliminarIndiceJson.setDisable(true);
-//        btnEliminarNombreJson.setDisable(true);
-//        fondoEliminarIndiceJson.setVisible(true);   
-//    }
-    
-    /**
-     * Invoca el metodo de verificacion de indice de la ListaEnlazadaDoble y valida 
-     * si existe o no el indice igresado
-     * @param e 
-     */
-//    @FXML
-//    private void verificarEliminarJson(ActionEvent e){
-//        int ind;
-//        String IND = txtEliminarIndiceField.getText();
-//        ind = Integer.parseInt(IND);
-//        if(ind < lista.size()){
-//            labelEliminarIndiceJson.setText(lista.obtener(ind).obtenerNombre());
-//            btnEliminarIndiceJsonDefinitivo.setDisable(false);
-//            
-//        }else{
-//            labelEliminarIndiceJson.setText("Indice no valido, vuelve a intentar!");
-//        }
-//    }
-    
-    /**
-     * invoca el metodo para eliminar un JsonStore
-     * @param e 
-     */
-//    @FXML
-//    private void eliminarJsonDefinitivo(ActionEvent e){
-//        int ind;
-//        String IND = txtEliminarIndiceField.getText();
-//        ind = Integer.parseInt(IND);
-//        lista.eliminar(ind);
-//        labelEliminarIndiceJson.setText("Eliminado");
-//        btnEliminarIndiceJsonDefinitivo.setDisable(true);
-//        labelListaStores.setText(lista.obtenerLista());
-//    }
-    
-    /**
-     * cambia de escenario
-     * @param e 
-     */
-//    @FXML
-//    private void eliminarNombreJson(ActionEvent e){
-//        btneliminarIndiceJson.setDisable(true);
-//        btnEliminarNombreJson.setDisable(true);
-//        fondoEliminarNombreJson.setVisible(true);
-//    }
-    
-    /**
-     * Invoca el metodo que devuel el JsonStore por nombre y valida si existe o no
-     * @param e 
-     */
-//    @FXML
-//    private void verificarEliminarNombreJson(ActionEvent e){
-//        String nom = txtEliminarNombreJsonField.getText();
-//        if(lista.obtener(nom) == null){
-//            labelEliminarJsonNombre.setText("No existe un JsonStore con ese nombre");
-//        }else{
-//            labelEliminarJsonNombre.setText(nom);
-//            btnEliminarNombreJsonDefinitivo.setDisable(false);
-//        }
-//    }
-    
-    /**
-     * cambia de escenario
-     * @param e 
-     */
-//    @FXML
-//    private void eliminarNombreJsonDefinitivo(ActionEvent e){
-//        String nom = txtEliminarNombreJsonField.getText();
-//        labelEliminarJsonNombre.setText(lista.eliminar(nom));
-//        labelListaStores.setText(lista.obtenerLista());
-//        btnEliminarNombreJsonDefinitivo.setDisable(true);
-//    }
-    
     private void eliminarNombreJsonDef(String nom){
         lista.eliminar(nom);
         labelListaStores.setText(lista.obtenerLista());
@@ -533,7 +456,7 @@ public class FXMLDocumentController implements Initializable {
     private DocumentoJson buscadoDoc;
     
     /**
-     * 
+     * Se asigna a buscadoDoc el documentoJson con el nombre del item que se selecciono en el arbol
      * @param nom 
      */
     private void buscarDocumentoJson2(String nom){
@@ -546,18 +469,22 @@ public class FXMLDocumentController implements Initializable {
      */
     @FXML
     private void crearDocumentoJson(ActionEvent e){
-        labelCrearDocumentoJson.setText(buscado.obtenerLista().add(txtCrearDocumentoJsonField.getText()));
-        labelListaDocumentos.setText(buscado.obtenerLista().obtenerLista());
-        buscadoDoc = buscado.obtenerLista().obtener(txtCrearDocumentoJsonField.getText());
-        if(labelCrearDocumentoJson.getText().equals("Documento existente")){
+        if(txtCrearDocumentoJsonField.getText().equals("")){
+            labelCrearDocumentoJson.setText("No se introdujo un nombre, vuelve a intentar");
         }else{
-            btnDefinirAtributo.setDisable(false);
-            btnCrearDocumento.setDisable(true);
-            TreeItem<String> item = arbol.getSelectionModel().getSelectedItem();
-            TreeItem<String> subItem = new TreeItem<>(txtCrearDocumentoJsonField.getText(),new ImageView(archivo));
-            item.setExpanded(true);
-            item.getChildren().add(subItem);
+            labelCrearDocumentoJson.setText(buscado.obtenerLista().add(txtCrearDocumentoJsonField.getText()));
+            labelListaDocumentos.setText(buscado.obtenerLista().obtenerLista());
+            buscadoDoc = buscado.obtenerLista().obtener(txtCrearDocumentoJsonField.getText());
+            if(labelCrearDocumentoJson.getText().equals("Documento existente")){
+            }else{
+                btnDefinirAtributo.setDisable(false);
+                btnCrearDocumento.setDisable(true);
+                TreeItem<String> item = arbol.getSelectionModel().getSelectedItem();
+                TreeItem<String> subItem = new TreeItem<>(txtCrearDocumentoJsonField.getText(),new ImageView(archivo));
+                item.setExpanded(true);
+                item.getChildren().add(subItem);
             
+            }
         }
     }
     
@@ -567,11 +494,16 @@ public class FXMLDocumentController implements Initializable {
     int cont = 0;
     
     /**
-     * 
+     * Se controlara que dependiendo las opciones marcadas y los valores ingresados 
+     * en la interface se defina corectamente el atributo con dichos valores
      * @param e 
      */
     @FXML
     private void definirAtributo(ActionEvent e){
+        if(txtNombreAtributoField.getText().equals("")){
+            labelDefAtributo.setText("No se introdujo ningun valor");
+            return;
+        }else{
         String nom = txtNombreAtributoField.getText();
         String valorDef = txtValorDefAtributoField.getText();
         String tipo;
@@ -606,8 +538,13 @@ public class FXMLDocumentController implements Initializable {
         buscadoDoc.obtenerLista().obtenerAtributo(cont).verCaracteristicas();
         txtNombreAtributoField.setText("");
         cont++;
+        }
     }
     
+    /**
+     * Cambia de escenario
+     * @param e 
+     */
     @FXML
     private void atrasCrearDocumento(ActionEvent e){
         fondoCrearDocumentoJson.setVisible(false);
@@ -616,59 +553,10 @@ public class FXMLDocumentController implements Initializable {
         labelCrearDocumentoJson.setText("");
     }
     
-    
-    
-//    @FXML
-//    private void goInsertarDocumentoJson(ActionEvent e){
-//        fondoInsertarDocumento1.setVisible(true);
-//        fondoMenuJsonStore.setVisible(false);
-//        btnVerificarInsertarDocumento.setDisable(false);
-//    }
-    
-//    @FXML
-//    private void verificarInsertarDocumento(){
-//        int ind;
-//        try{
-//        ind = Integer.parseInt(txtIndInsertarDocumentoField.getText());
-//        }catch(NumberFormatException e){
-//            labelInsertarDocumento1.setText("No se introdujo un un valor numerico");
-//            return;
-//        }
-//        if(ind > (buscado.obtenerLista().size()-1)){
-//            labelInsertarDocumento1.setText("Indice no valido, vuelve a intentar");
-//        }else{
-//            labelInsertarDocumento1.setText("Verificado");
-//            btnVerificarInsertarDocumento.setDisable(true);
-//            btnInsertarDocumentoDefinitivo.setDisable(false);
-//            fondoInsertarDocumento2.setVisible(true);
-//        }    
-//    }
-    
-//    @FXML
-//    private void insertarDocumentoDefinitivo(ActionEvent e){
-//        int ind;
-//        String IND = txtIndInsertarDocumentoField.getText();
-//        ind = Integer.parseInt(IND);
-//        labelInsertarDocumento2.setText(buscado.obtenerLista().insertar(ind,txtInsertarDocumentoNombreField.getText()));
-//        btnInsertarDocumentoDefinitivo.setDisable(true);
-//        btnContinuarInsertarDocumento.setDisable(false);
-//        labelListaDocumentos.setText(buscado.obtenerLista().obtenerLista()); 
-//    }
-    
-//    @FXML
-//    private void atrasInsertarDocumento(ActionEvent e){
-//        txtIndInsertarDocumentoField.setText("");
-//        txtInsertarDocumentoNombreField.setText("");
-//        labelInsertarDocumento1.setText("");
-//        labelInsertarDocumento2.setText("");
-//        fondoInsertarDocumento1.setVisible(false);
-//        fondoInsertarDocumento2.setVisible(false);
-//        btnContinuarInsertarDocumento.setDisable(true);
-//        fondoMenuJsonStore.setVisible(true);
-//    }
-    
-    
-    
+    /**
+     * Cambia de escenario
+     * @param e 
+     */
     @FXML
     private void goBuscarDocumentoJson(ActionEvent e){
         btnBuscarDocumentoIndice.setDisable(false);
@@ -679,6 +567,10 @@ public class FXMLDocumentController implements Initializable {
         txtBuscarDocumentoNombreField.setText("");
     }
     
+    /**
+     * Cambia de escenario
+     * @param e 
+     */
     @FXML
     private void atrasBuscarDocumento(ActionEvent e){
         fondoBuscarDocumento1.setVisible(false);
@@ -689,6 +581,11 @@ public class FXMLDocumentController implements Initializable {
         fondoMenuJsonStore.setVisible(true);
     }
     
+    
+    /**
+     * Cambia de escenario
+     * @param e 
+     */
     @FXML
     private void buscarDocumentoIndice(ActionEvent e){
         fondoBuscarIndiceDocumento.setVisible(true);
@@ -698,8 +595,10 @@ public class FXMLDocumentController implements Initializable {
         labelBuscarDocumentoIndice.setText("");
     }
     
-    
-    
+    /**
+     * Va pidiendo uno a uno los valores que se deben ingresar en los atributos defininidos 
+     * @param e 
+     */
     @FXML
     private void goBuscarDocumentoIndice(ActionEvent e){
         int ind;
@@ -715,7 +614,10 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
-    
+    /**
+     * Cambia de escenario
+     * @param e 
+     */
     @FXML
     private void buscarDocumentoNombre(ActionEvent e){
         fondoBuscarNombreDocumento.setVisible(true);
@@ -725,6 +627,10 @@ public class FXMLDocumentController implements Initializable {
         labelBuscarDocumentoNombre.setText("");
     }
     
+    /**
+     * Verifica que el DocumentoJson que se busca exista
+     * @param e 
+     */
     @FXML
     private void goBuscarDocumentoNombre(ActionEvent e){
         String nom = txtBuscarDocumentoNombreField.getText();
@@ -737,68 +643,10 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
-//    @FXML
-//    private void goIngresarEnDocumento(ActionEvent e){
-//        fondoBuscarNombreDocumento.setVisible(false);
-//        fondoBuscarIndiceDocumento.setVisible(false);
-//        fondoBuscarDocumento1.setVisible(false);
-//        fondoConsultaObjeto.setVisible(true);
-//    }
-    
-    
-//    @FXML
-//    private void atrasMenuDocumento(ActionEvent e){
-//        fondoMenuDocumento.setVisible(false);
-//        fondoMenuJsonStore.setVisible(true);
-//    }
-    
-    
-    
-    
-//    @FXML
-//    private void goEliminarDocumento(ActionEvent e){
-//        fondoEliminarDocumento.setVisible(true);
-//        btnEliminarNombreDocumento.setDisable(false);
-//        btnEliminarIndiceDocumento.setDisable(false);
-//        fondoMenuJsonStore.setVisible(false);
-//    }
-    
-//    @FXML
-//    private void atrasEliminarDocumento(ActionEvent e){
-//        fondoEliminarDocumento.setVisible(false);
-//        fondoMenuJsonStore.setVisible(true);
-//        fondoEliminarDocumentoNombre.setVisible(false);
-//        btnEliminarDocumentoNombreDef.setDisable(true);
-//    }
-    
-//    @FXML
-//    private void eliminarDocumentoNombre(ActionEvent e){
-//        btnEliminarNombreDocumento.setDisable(true);
-//        btnEliminarIndiceDocumento.setDisable(true);
-//        fondoEliminarDocumentoNombre.setVisible(true);
-//        labelEliminarDocumentoNombre.setText("");
-//    }
-    
-//    @FXML
-//    private void goEliminarDocumentoNombre(ActionEvent e){
-//        String nom = txtEliminarDocumentoNombreField.getText();
-//        if(buscado.obtenerLista().obtener(nom) == null){
-//            labelEliminarDocumentoNombre.setText("No existe un DocumentoJson con ese nombre");
-//        }else{
-//            labelEliminarDocumentoNombre.setText(nom);
-//            btnEliminarDocumentoNombreDef.setDisable(false);
-//        }   
-//    }
-    
-    
-//    @FXML
-//    private void eliminarDocumentoNombreDef(ActionEvent e){
-//        String nom = txtEliminarDocumentoNombreField.getText();
-//        labelEliminarDocumentoNombre.setText(buscado.obtenerLista().eliminar(nom));
-//        labelListaDocumentos.setText(buscado.obtenerLista().obtenerLista());
-//        btnEliminarDocumentoNombreDef.setDisable(true);
-//    }
-    
+    /**
+     * Se introduce el nombre del DocumentoJson a eliminar
+     * @param nom 
+     */
     private void eliminarDocNomDef(String nom){
         buscado.obtenerLista().eliminar(nom);
         labelListaDocumentos.setText(buscado.obtenerLista().obtenerLista());
@@ -816,10 +664,14 @@ public class FXMLDocumentController implements Initializable {
     
     
     
-    
+    /**
+     * En esta variable se guardara el atributo que se este manipulando
+     */
     private Atributo atributo;
-//    private int contador;
     
+    /**
+     * Cambia de escenario y 
+     */
     @FXML
     private void crearObjeto(){
         fondoInsertarJson1.setVisible(false);
@@ -847,8 +699,30 @@ public class FXMLDocumentController implements Initializable {
         labelCrearObjeto1.setText("Ingrese el valor de "+atributo.obtenerNombre());
     }
     
+    /**
+     * Se toma el valor ingresado en el campo de texto y se intorduce dentro de la lista de 
+     * ObjetosJson que se encuentra dentro del atributo que se esta manipulando
+     */
     @FXML
     private void crearObjetoDef(){
+        if(txtCrearObjetoField.getText().equals("")){
+            if(!atributo.requerido()){
+                atributo.obtenerLista().add(atributo.valPorDefecto());
+                System.out.println(atributo.obtenerLista().obtenerLista());
+                atributo = atributo.obtenerSiguiente();
+                if(atributo != null){
+                    labelCrearObjeto1.setText("Ingrese el valor de "+atributo.obtenerNombre());
+                    labelCrearObjeto.setText("");
+                }else{
+                    btnContinuarObjeto.setDisable(false);
+                    btnInsertarUnObjeto.setDisable(true);
+                }
+                return;
+            }else{
+            labelCrearObjeto.setText("No se introdujo ningun valor");
+            return;
+            }
+        }
         if(atributo.obtenerTipo().equals("entero")){
             int valor;
             try{
@@ -860,7 +734,7 @@ public class FXMLDocumentController implements Initializable {
         }
         if(atributo.obtenerTipoEspecial().equals("llavePrimaria")){
             if(atributo.obtenerLista().addComoLlave(txtCrearObjetoField.getText()).equals("existe")){
-                labelCrearObjeto.setText("Llave foranea existente");
+                labelCrearObjeto.setText("Llave primaria existente");
                 return;
             }
         }else{
@@ -868,22 +742,25 @@ public class FXMLDocumentController implements Initializable {
         }
             System.out.println(atributo.obtenerLista().obtenerLista());
             atributo = atributo.obtenerSiguiente();
-            if(atributo != null){
-                labelCrearObjeto1.setText("Ingrese el valor de "+atributo.obtenerNombre());
-                labelCrearObjeto.setText("");
-            }else{
-                btnContinuarObjeto.setDisable(false);
-                btnInsertarUnObjeto.setDisable(true);
+        if(atributo != null){
+            labelCrearObjeto1.setText("Ingrese el valor de "+atributo.obtenerNombre());
+            labelCrearObjeto.setText("");
+        }else{
+            btnContinuarObjeto.setDisable(false);
+            btnInsertarUnObjeto.setDisable(true);
         }
         txtCrearObjetoField.setText("");
-        
     }
     
     
-    
+    /**
+     * En este metodo se crean las columnas con los Atributos pertenecientes al DocumentoJson 
+     * que se esta manipulando en ese momento y se introducen los datos que esten registrados 
+     * dentro de las celdas de la tabla y tambien se crea la JsonView que se observa en pantalla
+     */
     @FXML
     private void goConsultaObjeto(){
-        txtConsultaObjetosArea.setText("");
+        txtConsultaObjetosArea.setText("{\n\r");
         fondoPrincipal.setVisible(false);
         fondoInsertarJson1.setVisible(false);
         fondoInsertarJson2.setVisible(false);
@@ -912,7 +789,12 @@ public class FXMLDocumentController implements Initializable {
         actual = buscadoDoc.obtenerLista().obtenerCabeza();
         int indice = 0;
         while(actual!= null){
-            TableColumn<List<String>, String> columna = new TableColumn(actual.obtenerNombre());
+            TableColumn<List<String>, String> columna = new TableColumn();
+            if(actual.obtenerTipoEspecial().equals("llavePrimaria")){
+                columna.setText(actual.obtenerNombre()+"(Llave Prim)");
+            }else{
+                columna.setText(actual.obtenerNombre());
+            }
             int colIndex = indice ;
             columna.setCellValueFactory(cellData -> 
             new SimpleStringProperty(cellData.getValue().get(colIndex)));
@@ -931,18 +813,25 @@ public class FXMLDocumentController implements Initializable {
                 actual = actual.obtenerSiguiente();
             }
             data.add(row);
-            txtConsultaObjetosArea.appendText("{"+registro+"}"+"\n\r");
+            txtConsultaObjetosArea.appendText("{"+registro+"},"+"\n\r");
             contador++;
         }
+        txtConsultaObjetosArea.appendText("}");
         ObservableList<List<String>> inpData = FXCollections.observableArrayList(data);
         tabla.setItems(inpData); 
     }
     
-    //TableView
+    /**
+     * Variable tabla para la table view y variable data en donde se almacenaran los 
+     * datos que se obcervaran en una fila de la tabla.
+     */
     @FXML
     private TableView<List<String>> tabla = new TableView<>();
     List<List<String>> data = new ArrayList<List<String>>();
     
+    /**
+     * Cambia de la TableView a la JsonView
+     */
     @FXML
     private void vistaTablaJson(){
         if(rbTableView.isSelected()){
@@ -952,14 +841,19 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
-    
+    /**
+     * Cambia de escenario
+     * @param e 
+     */
     @FXML
     private void atrasConsultaObjeto(ActionEvent e){
         fondoConsultaObjeto.setVisible(false);
         fondoPrincipal.setVisible(true);
     }
     
-    
+    /**
+     * Cambia de escenario
+     */
     @FXML
     private void goBuscarObjeto(){
         fondoPrincipal.setVisible(false);
@@ -984,26 +878,29 @@ public class FXMLDocumentController implements Initializable {
         btnBuscarAtributo.setDisable(false);
     }
     
-    
-//    @FXML
-//    private void atrasBuscarObjeto(ActionEvent e){
-//        fondoBuscarObjeto.setVisible(false);
-//        fondoBuscarLlavePrim.setVisible(false);
-//        fondoBuscarAtributo.setVisible(false);
-//        fondoConsultaObjeto.setVisible(true);
-//    }
-    
-    
+    /**
+     * Cambia de escenario
+     * @param e 
+     */
     @FXML
     private void goBuscarLlavePrim(ActionEvent e){
+        btnBuscarAtributo.setDisable(true);
         btnBuscarLLavePrim.setDisable(true);
         fondoBuscarLlavePrim.setVisible(true);
         txtBuscarLlavePrimField.setText("");
         txtBuscarLlavePrimArea.setText("");
     }
     
+    /**
+     * Se encarga de verificar que el valor que se ingeso se encuentre en la lista enlazada
+     * y que ademas sea llave primaria para mostrarlo en pantalla
+     * @param e 
+     */
     @FXML
     private void buscarLlavePrim(ActionEvent e){
+        if(txtBuscarLlavePrimField.getText().equals("")){
+            txtBuscarLlavePrimArea.setText("No se itrodujo ningun valor");
+        }else{
         Atributo actual = buscadoDoc.obtenerLista().obtenerCabeza();
         while(actual != null){
             if(actual.obtenerTipoEspecial().equals("llavePrimaria")){
@@ -1027,19 +924,32 @@ public class FXMLDocumentController implements Initializable {
             }
         }
         txtBuscarLlavePrimArea.setText("No existe una llave primaria en este Documento");
+        }
     }
     
-    
+    /**
+     * Cambio de escenario
+     * @param e 
+     */
     @FXML
     private void goBuscarAtributo(ActionEvent e){
         btnBuscarLLavePrim.setDisable(true);
         btnBuscarAtributo.setDisable(true);
         fondoBuscarAtributo.setVisible(true);
-        
     }
     
+    /**
+     * Se toma el valor ingresado en el campo de texto y se procede a verificar que
+     * ese valor se encuentre registrado en alguna de las listas que se encuentran
+     * almacenadoas en los atributos pertenecientes al DocumentoJson que se esta consultando
+     * y se muestran todos los registros que contengan este dato
+     * @param e 
+     */
     @FXML
     private void buscarAtributo(ActionEvent e){
+        if(txtBuscarAtributoField.getText().equals("")){
+            txtBuscarAtributoArea.setText("No se introdujo un valor");
+        }else{
         txtBuscarAtributoArea.setText("");
         Atributo actual = buscadoDoc.obtenerLista().obtenerCabeza();
         Atributo temporal;
@@ -1068,11 +978,13 @@ public class FXMLDocumentController implements Initializable {
                 contador = 0;
             }
         }
+        }
     }    
             
-    
-    
-    
+    /**
+     * cambia de escenario
+     * @param e 
+     */
     @FXML
     private void goEliminarObjeto(ActionEvent e){
         fondoConsultaObjeto.setVisible(false);
@@ -1081,7 +993,17 @@ public class FXMLDocumentController implements Initializable {
         txtConsultaObjetosArea.setText("");
     }
     
+    /**
+     * Variable que 
+     */
     int indi;
+    
+    /**
+     * Este metodo se encarga de consultar si si existe un Atributo que cuya variable TipoEspecial
+     * sea llave primaria y consulta si el valor ingresado existe y muestra los demas datos de este
+     * registro en pantalla
+     * @param e 
+     */
     @FXML
     private void verificarEliminarObjeto(ActionEvent e){
         Atributo actual = buscadoDoc.obtenerLista().obtenerCabeza();
@@ -1111,7 +1033,10 @@ public class FXMLDocumentController implements Initializable {
         txtEliminarObjetoArea.setText("No existe una llave primaria en este Documento");
     }
     
-    
+    /**
+     * Se eliminara definitivamente el registro consultado del documento
+     * @param e 
+     */
     @FXML
     private void eliminarObjetoDef(ActionEvent e){
         Atributo actual = buscadoDoc.obtenerLista().obtenerCabeza();
@@ -1124,13 +1049,11 @@ public class FXMLDocumentController implements Initializable {
         btnEliminarObjeto.setDisable(true);
     }
     
-//    @FXML
-//    private void atrasEliminarObjeto(ActionEvent e){
-//        fondoConsultaObjeto.setVisible(true);
-//        fondoEliminarObjeto.setVisible(false);
-//    }
-    
-    
+    /**
+     * En este metodo permitira eliminar todos los datos contenidos dentro
+     * de cata atributo
+     * @param e 
+     */
     @FXML
     private void eliminarTodosObjetos(ActionEvent e){
         Atributo actual = buscadoDoc.obtenerLista().obtenerCabeza();
@@ -1140,11 +1063,17 @@ public class FXMLDocumentController implements Initializable {
             }
             actual = actual.obtenerSiguiente();
         }
-        txtConsultaObjetosArea.setText("");
+        goConsultaObjeto();
     }
     
     
-    //Comit
+    /**
+     * Este metodo permitira guardar los datos en un archivo de texto de manera
+     * que se ingresara toda la estructura en este
+     * @param e
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     @FXML
     private void comit(ActionEvent e) throws FileNotFoundException, IOException{
         FileOutputStream out = new FileOutputStream("Jsons.txt");
@@ -1154,36 +1083,21 @@ public class FXMLDocumentController implements Initializable {
         salida.flush();
     }
     
-    
-    
-    
-    
-    
-    @FXML
-    private void imprimir(ActionEvent e){
-        if(flag){
-            imprime.setVisible(false);
-            flag = false;
-        }else{
-            imprime.setVisible(true);
-            flag = true;
-        }
-        
-    } 
-      
-        
-    //treeview
+    /**
+     * TreeView
+     */
     @FXML
     private TreeView<String> arbol;
     
     /**
-     * menu de JsonStore para clic derecho en arbol
+     * Menu de JsonStore para clic derecho en arbol
      */
     private ContextMenu menuDerecho = new ContextMenu();
     private MenuItem itemJ1 = new MenuItem("Eliminar");
     private MenuItem itemJ3 = new MenuItem("Crear Documento");
+    
     /**
-     * menu de DocumentoJson  para clic derecho en arbol
+     * Menu de DocumentoJson  para clic derecho en arbol
      */
     private ContextMenu menuDerechoDoc = new ContextMenu();
     private MenuItem itemD1 = new MenuItem("Eliminar");
@@ -1191,7 +1105,9 @@ public class FXMLDocumentController implements Initializable {
     private MenuItem itemD4 = new MenuItem("Ver Objetos");
     private MenuItem itemD5 = new MenuItem("Buscar Objeto");
     
-    
+    /**
+     * Botones de la interface del sistema
+     */
     //Botones pagina principal
     @FXML
     private Button btninsertarJson;
@@ -1202,7 +1118,6 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button comitSave;
     
-    
     //Botones para insertar json
     @FXML
     private Button btnInsertarJson2;
@@ -1212,7 +1127,6 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private Button btnContinuarInsertarJson;
-    
     
     //Botones buscar JsonStore
     @FXML
@@ -1227,25 +1141,8 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button btnIngresarJsonNombre;
     
-    
-    //Botones para eliminar JsonStore
-//    @FXML
-//    private Button btneliminarIndiceJson;
-//    
-//    @FXML
-//    private Button btnVerificarEliminarIndJson;
-    
     @FXML
     private Button btnEliminarIndiceJsonDefinitivo;
-    
-//    @FXML
-//    private Button btnEliminarNombreJson;
-    
-//    @FXML
-//    private Button btnEliminarNombreJsonDefinitivo;
-    
-    
-    
     
     //Botones DocumentoJson
     //Botones crear DocumentoJson
@@ -1253,16 +1150,6 @@ public class FXMLDocumentController implements Initializable {
     private Button btnDefinirAtributo;
     @FXML
     private Button btnCrearDocumento;
-    
-    //Botones insertar DocumentoJson
-//    @FXML
-//    private Button btnVerificarInsertarDocumento;
-    
-//    @FXML
-//    private Button btnInsertarDocumentoDefinitivo;
-    
-//    @FXML
-//    private Button btnContinuarInsertarDocumento;
     
     @FXML
     private Button btnVerificarEliminarNombreJson;
@@ -1286,25 +1173,12 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button btnIngresarDocumentoNombre;
     
-    
-    //Botones para eliminar DocumentoJson
-//    @FXML
-//    private Button btnEliminarNombreDocumento;
-    
-//    @FXML
-//    private Button btnEliminarIndiceDocumento;
-    
-//    @FXML
-//    private Button btnEliminarDocumentoNombreDef;
-    
-    
     //Botones para crear ObjetoJson
     @FXML
     private Button btnContinuarObjeto;
     
     @FXML
     private Button btnInsertarUnObjeto;
-    
     
     //Botones para buscar ObjetoJson
     @FXML
@@ -1313,14 +1187,15 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button btnBuscarAtributo;
     
-    
     //Botones para eliminar ObjetosJson
     @FXML
     private Button btnEliminarObjeto;
     
     
     
-    //labels
+    /**
+     * Labels del sitema
+     */
     @FXML
     private Label imprime;
     
@@ -1338,13 +1213,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     public Label labelBuscarJsonIndice;
-    
-//    @FXML
-//    public Label labelEliminarIndiceJson;
-    
-//    @FXML
-//    public Label labelEliminarJsonNombre;
-    
+
     @FXML
     public Label labelPricipalMenuJsonStore;
     
@@ -1359,25 +1228,13 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     public Label labelBuscarJsonNombre;
-    
-//    @FXML
-//    public Label labelInsertarDocumento1;
-    
-//    @FXML
-//    public Label labelInsertarDocumento2;
-    
+
     @FXML
     public Label labelBuscarDocumentoIndice;
     
     @FXML
     public Label labelBuscarDocumentoNombre;
-    
-//    @FXML
-//    public Label labelEliminarDocumentoNombre;
-    
-//    @FXML
-//    public Label labelMenuDocumento;
-    
+
     @FXML
     public Label labelCrearObjeto1;
     
@@ -1387,7 +1244,9 @@ public class FXMLDocumentController implements Initializable {
     
     
     
-    //text fields
+    /**
+     * TextFields del Sistema
+     */
     @FXML
     private TextField txtNombreJsonField;
     
@@ -1403,13 +1262,6 @@ public class FXMLDocumentController implements Initializable {
     private TextField txtBuscarIndiceField;
     
     
-//    @FXML
-//    private TextField txtEliminarIndiceField;
-    
-//    @FXML
-//    private TextField txtEliminarNombreJsonField;
-    
-    
     @FXML
     private TextField txtCrearDocumentoJsonField;
     
@@ -1417,22 +1269,11 @@ public class FXMLDocumentController implements Initializable {
     private TextField txtbucarJsonNombreField;
     
     
-//    @FXML
-//    private TextField txtIndInsertarDocumentoField;
-    
-//    @FXML
-//    private TextField txtInsertarDocumentoNombreField;
-    
-    
     @FXML
     private TextField txtBuscarIndiceDocumento;
     
     @FXML
     private TextField txtBuscarDocumentoNombreField;
-    
-    
-//    @FXML
-//    private TextField txtEliminarDocumentoNombreField;
     
     
     @FXML
@@ -1458,7 +1299,9 @@ public class FXMLDocumentController implements Initializable {
     
     
     
-    //TextArea
+    /**
+     * Text areas del Sitema
+     */
     @FXML
     private TextArea txtConsultaObjetosArea;
     
@@ -1473,14 +1316,18 @@ public class FXMLDocumentController implements Initializable {
     
     
     
-    //ComboBox
+    /**
+     * ComboBox para escojer el tipo del atributo y su lista observable
+     */
     @FXML
     private ComboBox<String> boxTipoAtributo;
     
     ObservableList<String> comboLista = FXCollections.observableArrayList("entero","flotante","cadena","fechaHora");
     
     
-    //Fondos
+    /**
+     * Fondos de los diferentes escenarios
+     */
     @FXML
     private Pane fondoPrincipal;
     
@@ -1505,23 +1352,8 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Pane fondoMenuJsonStore;
     
-//    @FXML
-//    private Pane fondoEliminarStore;
-    
-//    @FXML
-//    private Pane fondoEliminarIndiceJson;
-    
-//    @FXML
-//    private Pane fondoEliminarNombreJson;
-    
     @FXML
     private Pane fondoCrearDocumentoJson;
-    
-//    @FXML
-//    private Pane fondoInsertarDocumento1;
-//    
-//    @FXML
-//    private Pane fondoInsertarDocumento2;
     
     @FXML
     private Pane fondoBuscarDocumento1;
@@ -1531,15 +1363,6 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private Pane fondoBuscarNombreDocumento;
-    
-//    @FXML
-//    private Pane fondoEliminarDocumento;
-    
-//    @FXML
-//    private Pane fondoEliminarDocumentoNombre;
-    
-//    @FXML
-//    private Pane fondoMenuDocumento;
     
     @FXML
     private Pane fondoCrearObjeto;
@@ -1560,7 +1383,9 @@ public class FXMLDocumentController implements Initializable {
     private Pane fondoBuscarAtributo;
     
     
-    //Radio buttons
+    /**
+     * RadioButons del sistema
+     */
     //Crear documento
     @FXML
     private RadioButton rbTipoForanea;
@@ -1577,6 +1402,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private RadioButton rbReqNo;
     
+    //Cambiar vista de los ObjetosJson
     @FXML
     private RadioButton rbTableView;
     
@@ -1584,15 +1410,14 @@ public class FXMLDocumentController implements Initializable {
     private RadioButton  rbJsonView;
     
     
-    //Imagenes
+    /**
+     * Imagenes de la interface
+     */
     Image carpeta = new Image(getClass().getResourceAsStream("/Images/Carpeta.png"));
     
     Image archivo = new Image(getClass().getResourceAsStream("/Images/Archivo.png"));
     
     Image save = new Image(getClass().getResourceAsStream("/Images/save.png"));
-    
-    
-    private boolean flag = false;
     
     
     
@@ -1605,6 +1430,10 @@ public class FXMLDocumentController implements Initializable {
         txtIndInsertJsonField.setText("");
         txtIndInsertNombreJsonField.setText("");
         comitSave.setGraphic(new ImageView(save));
+        /**
+         * dentro de este try catch se llama al metodo cargar datos que se encargara de traer 
+         * todos los datos deste disco y llenar todas las estructuras con la informacion
+         */
         try {
             cargarDatos();
         } catch (IOException ex) {
@@ -1612,8 +1441,16 @@ public class FXMLDocumentController implements Initializable {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        /**
+         * se agregan los items que se crearon a cada context menu
+         */
         menuDerecho.getItems().addAll(itemJ1,new SeparatorMenuItem(),itemJ3);
         menuDerechoDoc.getItems().addAll(itemD1,new SeparatorMenuItem(),itemD3,itemD4,itemD5);
+        
+        /**
+         * se le dan acciones a cada item de los context menu
+         */
         itemJ1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -1646,8 +1483,6 @@ public class FXMLDocumentController implements Initializable {
         itemD5.setOnAction(event ->{
             goBuscarObjeto();
         });
-        TableColumn columna = new TableColumn("Ejemplo");
-        tabla.getColumns().add(columna);
     }
     
 }
